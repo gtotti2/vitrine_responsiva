@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'OPTICorvinus';
+    src: url('OPTICorvinus-Skyline.eot');
+    src: url('OPTICorvinus-Skyline.eot?#iefix') format('embedded-opentype'),
+        url('OPTICorvinus-Skyline.woff2') format('woff2'),
+        url('OPTICorvinus-Skyline.woff') format('woff'),
+        url('OPTICorvinus-Skyline.ttf') format('truetype'),
+        url('OPTICorvinus-Skyline.svg#OPTICorvinus-Skyline') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+

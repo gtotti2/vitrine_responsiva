@@ -1,67 +1,29 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
+<!-- <link rel="stylesheet" href="https://images.livrariasaraiva.com.br/estatico/2017/bibliotecas/css/grid-css.css?new"> -->
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/jquery.slick/1.3.15/slick.css">
+
 <link rel="stylesheet" type="text/css" href="./css/estilo.css">
 <!-- VITRINE COMUM -->
-<div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"comum"}' data-responsivo='[
-    {
-        "breakpoint": 1439,
-        "settings": {
-          "slidesToShow": 4
-        }
-      },
-      {
-        "breakpoint": 1023,
-        "settings": {
-          "slidesToShow": 3
-        }
-      },
-      {
-        "breakpoint": 767,
-        "settings": {
-          "slidesToShow": 2
-        }
-      },
-      {
-        "breakpoint": 424,
-        "settings": {
-          "slidesToShow": 1
-        }
-      }]'>
+
+<div class="container-fluid">
+    <div class="row">
+        <div data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1,"variableWidth": true}' data-vitrine='{"id_vitrine":28595,"produtos_quantidade":15,"tipo":"estante"}'
+            data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": "1"}},{"breakpoint": 1023,"settings": {"slidesToShow": "1"}},{"breakpoint": 767,"settings": {"slidesToShow": "1"}},{"breakpoint": 424,"settings": {"slidesToShow": "1"}}]'></div>
+    </div>
+    <div class="row">
+        <div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"comum"}' data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 4}' data-responsivo>
+        </div>
+    </div>
 </div>
 
-<!-- VITRINE ASPIRACIONAL -->
 
-<div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"aspiracional"}' data-responsivo='[
-    {
-        "breakpoint": 1439,
-        "settings": {
-          "slidesToShow": 4
-        }
-      },
-      {
-        "breakpoint": 1023,
-        "settings": {
-          "slidesToShow": 3
-        }
-      },
-      {
-        "breakpoint": 767,
-        "settings": {
-          "slidesToShow": 2
-        }
-      },
-      {
-        "breakpoint": 424,
-        "settings": {
-          "slidesToShow": 1
-        }
-      }]'>
-</div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+<script src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
-    function htmlShowcaseProduct(lista, el) {
+
+    function vitrineLoader(lista, el) {
         var showcaseProducts,
             htmlShowcase,
             htmlShowCaseAspirational,
@@ -211,7 +173,15 @@
             }
 
             function sobEncomenda(status) {
-                status ? status : false
+                return status ? status : false
+            }
+
+            function limitPrice(price) {
+                if (price.length > 60) {
+                    return price.substring(0, 57) + '...'
+                } else {
+                    return price
+                }
             }
 
             var htmlShowCaseAspirational = '<div class="product__aspirational" data-pid="' + showcaseProducts.id + '" id="coleAspi__showcase-' + showcaseProducts.id + '" data-sku="' + showcaseProducts.sku + '" data-sob="' + sobEncomenda(showcaseProducts.back_order) + '" itemscope itemtype="http://schema.org/Product">' +
@@ -277,11 +247,35 @@
                 '</div>' +
                 '</div>' +
                 '</li>';
+            htmlShowcaseEstante =
+                '<div class="product__estante" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
+                '<a href="' + showcaseProducts.url + '" data-track="click">' +
+                '<figure>' +
+                '<div class="seal ' + showDigitalSeal(showcaseProducts.digital) + '"></div>' +
+                '<img alt="' + showcaseProducts.name + '" src="' + fixImageUrl(showcaseProducts) + '">' +
+                '<figcaption>' +
+                '<div class="content__product">' +
+                '<div class="price-group">' +
+                '<div class="preorder">' + validPre(showcaseProducts.presale) + '</div>' +
+                '<div class="price">' + validPrace(showcaseProducts.price_block.price) + '</div>' +
+                '<div class="special-price">R$ ' + showcaseProducts.price_block.credit_card.value_with_discount + '</div>' +
+                '<div class="discount-cc">' + limitPrice(validInstallmente(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price)) +
+                '</div>' +
+                '</div>' +
+                '</figcaption > ' +
+                '</figure>' +
+                '</a>' +
+                '</div>';
 
-            tipoVitrine == "comum" ? htmlShowcase : htmlShowcase = htmlShowCaseAspirational
+            tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : htmlShowcase = htmlShowcaseEstante
 
             $(el).append(htmlShowcase);
+            tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div>teste</div>')) : "" : ""
+            
+
         });
+
+
         if (typeof dataLayer !== "undefined") {
             dataLayer.push({
                 'event': 'productImpression',
@@ -435,7 +429,7 @@
         $(element).closest('[data-vitrine]').find('.modal').append(htmlProduct);
     }
 
-    function loadProduct(id, sob, el) {
+    function loadProduct(id, sob, element) {
         var sku = id;
         var sob = sob;
         $.ajax({
@@ -445,7 +439,7 @@
                 $('[data-vitrine] .modal').append('<img class="load-ajaxing" style="display:block;margin:100px auto 70px;" src="http://www.saraiva.com.br/skin/frontend/saraiva/saraiva/images/opc-ajax-loader.gif" alt="">');
             },
             success: function (data) {
-                htmlModal(data, id, sob, el);
+                htmlModal(data, id, sob, element);
             },
             complete: function (resposta) {
                 $('[data-vitrine] .modal .load-ajaxing').remove();
@@ -468,7 +462,7 @@
     }
 
     function closeModal() {
-        $('[data-vitrine] .modal, [data-vitrine] .overlay').fadeOut('slow',function(){
+        $('[data-vitrine] .modal, [data-vitrine] .overlay').fadeOut('slow', function () {
             $(this).remove()
         })
         if (width <= 768) {
@@ -515,17 +509,17 @@
             'ecommerce': {
                 'click': {
                     'actionField': {
-                        'list': $(element).parents('li').attr('data-track-list')
+                        'list': $(element).data('track-list')
                     },
                     'products': [{
-                        'name': $(element).parents('li').attr('data-track-name'),
-                        'id': Number($(element).parents('li').attr('data-track-id')),
-                        'price': Number($(element).parents('li').attr('data-track-price')),
-                        'brand': $(element).parents('li').attr('data-track-brand'),
-                        'category': $(element).parents('li').attr('data-track-category'),
-                        'variant': $(element).parents('li').attr('data-track-variant'),
-                        'position': $(element).parents('li').attr('data-track-position'),
-                        'vitrine': $(element).parents('li').attr('data-track-vitrine')
+                        'name': $(element).data('track-name'),
+                        'id': Number($(element).data('track-id')),
+                        'price': Number($(element).data('track-price')),
+                        'brand': $(element).data('track-brand'),
+                        'category': $(element).data('track-category'),
+                        'variant': $(element).data('track-variant'),
+                        'position': $(element).data('track-position'),
+                        'vitrine': $(element).data('track-vitrine')
                     }]
                 }
             },
@@ -536,54 +530,76 @@
     }
 
 
-    function slickLoadAjax(thisSlider) {
+    function slickLoadAjax(thisSlider, id_vitrine) {
         var data = $(thisSlider).data("vitrine"),
             responsivo = $(thisSlider).data("responsivo"),
-            hasSiblings = $(thisSlider).siblings('.slick-initialized').length,
-            siblings = $(thisSlider).siblings('.slick-initialized');
+            slickOptions = $(thisSlider).data("slick-options"),
+            slicked = $(thisSlider).hasClass("slick-initialized");
 
-        var slickPadrao = {
-            mobileFirst: true, infinite: false, dots: true, responsive: responsivo
-        }
+        // carregar id respectivo passado como parâmetro
+        !id_vitrine ? id_vitrine = data.id_vitrine : id_vitrine
 
-        if (hasSiblings) {
-            siblings.slick('unslick')
-        }
-        var mobileScreen = $(window).width() <= 768
+        //instruções default
+        var responsiveOptionsDefault = [{ breakpoint: 1439, settings: { slidesToShow: 4 } }, { breakpoint: 1023, settings: { slidesToShow: 3 } }, { breakpoint: 767, settings: { slidesToShow: 2 } }, { breakpoint: 424, settings: { slidesToShow: 1 } }],
+            slickOptionsDefault = { mobileFirst: true, infinite: false, dots: true, responsive: responsivo ? responsivo : responsiveOptionsDefault },
+            mobileScreen = $(window).width() <= 768
+        slickOptionsEstante = { dots: true, infinite: true, speed: 300, slidesToShow: 1, centerMode: true, variableWidth: true }
+
+
+        // Se não possuir slick options e não possuir slick options responsiva carregar instruções default
+        !slickOptions ? slickOptions = slickOptionsDefault : slickOptions.responsive == undefined ? slickOptions.responsive = responsiveOptionsDefault : slickOptions.responsive
+
+        data.tipo == "estante" ? delete slickOptions.responsive : slickOptions
+        // Carregar 5 itens apenas no mobile
         mobileScreen ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade
 
-        $.ajax({
-            url: 'https://api.saraiva.com.br/collection/products/' + data.id_vitrine + '/0/0/1?l=' + data.produtos_quantidade,
-            type: 'GET'
-        }).done(function (data) {
-            htmlShowcaseProduct(data, thisSlider)
-            thisSlider.fadeIn('fast', function () {
-            }).slick(slickPadrao).addClass('active')
-        })
+
+        function callAjax() {
+            $.ajax({
+                url: 'https://api.saraiva.com.br/collection/products/' + id_vitrine + '/0/0/1?l=' + data.produtos_quantidade,
+                type: 'GET'
+            }).done(function (data) {
+                slickOptions.variableWidth ? slickOptions.slidesToShow = data.total_count - 1 : slickOptions.slidesToShow
+                vitrineLoader(data, thisSlider)
+                $(thisSlider).fadeIn('fast', function () {
+                }).slick(slickOptions).addClass('active')
+            })
+        }
+        if (slicked) {
+            $(thisSlider).fadeOut('fast', function () {
+                $(this).slick('unslick').children().remove().promise().done(function () {
+                    callAjax()
+                })
+            })
+        } else {
+            callAjax()
+        }
     }
 
     function loadSlicks() {
         var vitrines = $('[data-vitrine]')
         vitrines.each(function (index) {
             var $this = $(this)
+            $(this).addClass($(this).data("vitrine").tipo)
             slickLoadAjax($this)
         })
     }
 
+
     $(document).ready(function () {
-        width = $(window).width();
 
         $('[data-vitrine]').on('click', '.product__aspirational', function (e) {
             e.preventDefault()
             openModal(e.currentTarget)
         })
-        $('[data-vitrine]').click( function (e) {
-            if(e.target == $('.overlay')[0] || e.target == $(e.target).closest('.fechar').find('svg')[0]){
+
+        $('[data-vitrine]').click(function (e) {
+            if (e.target == $('.overlay')[0] || e.target == $(e.target).closest('.fechar').find('svg')[0]) {
                 closeModal()
             }
         })
 
-        $('body').on('click', '#btn-cart', function (e) {
+        $('[data-vitrine]').on('click', '#btn-cart', function (e) {
             if ($(e.currentTarget).closest('[data-vitrine] .modal .button')) {
                 addToCartOnModal(e)
             } else if ($(e.currentTarget).closest('.content__action')) {
@@ -591,10 +607,19 @@
             }
         });
 
-        $('body').on('click', '[data-track="click"]', function (e) {
+        $('[data-vitrine]').on('click', '[data-track="true"]', function (e) {
             dataTrack(e.currentTarget)
         });
+
+        $('[data-menu-vitrine] li').click(function () {
+            var $this = $(this)
+            !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('load-vitrine')) : ''
+            $this.addClass('active').siblings().removeClass('active')
+        })
+
+        // Document.ready
         loadSlicks()
+        width = $(window).width()
     })
 
 

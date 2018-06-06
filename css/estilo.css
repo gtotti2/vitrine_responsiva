@@ -1,12 +1,23 @@
+body{
+    background: #ccc;
+}
+[data-menu-vitrine] {
+    min-height: 350px;
+}
+
 [data-vitrine] {
     max-width: 1360px;
     margin: 0 auto;
-    max-height: 350px;
+    max-height: 390px;
     text-align: center;
     font-family: 'Work Sans', sans-serif;
-    color: #fff;
 }
-
+[data-vitrine].estante{
+    max-height: 390px;
+}
+[data-vitrine].comum .slick-dots{
+    bottom: -45px;
+}
 [data-vitrine] .slick-arrow {
     width: 48px;
     height: 48px;
@@ -375,12 +386,10 @@
     box-shadow: initial;
 }
 
-[data-vitrine] .slick-slide {
-    height: auto;
-}
 
 [data-vitrine] .slick-dots {
     padding: 0;
+    bottom: -12px;
 }
 
 [data-vitrine] .slick-dots li {
@@ -407,6 +416,111 @@
     text-indent: -9999px;
     outline: 1px solid transparent;
 }
+[data-vitrine] .slick-slide{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+[data-vitrine] .product__estante {
+    position: relative;
+    margin: 0 10px;
+}
+[data-vitrine] .product__estante a{
+    text-decoration: none;
+}
+[data-vitrine] .product__estante .seal{
+    margin: 0 auto;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+[data-vitrine] .product__estante .seal.digital:before {
+    content: 'e-book';
+    padding: 6px 14px;
+    margin:  0px auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 70px;
+    border-radius: 5px;
+    background-color: #1d6dff;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+[data-vitrine] .product__estante figure {
+    margin: 0 auto;
+    display: table;
+}
+[data-vitrine] .product__estante img{
+    padding-top: 10px;
+}
+[data-vitrine] .product__estante img, figcaption {
+    display: table-caption;
+    caption-side: bottom;
+    vertical-align: top;
+    min-width: 110px;
+}
+[data-vitrine] .product__estante img{
+    height: 250px;
+    text-align: center;
+    margin: 0 auto;
+}
+[data-vitrine] .product__estante .content__product {
+    padding: 0; 
+}
+[data-vitrine] .product__estante .content__product .preorder {
+    height: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #1d6cff;
+}
+[data-vitrine] .product__estante .content__product .price-group {
+    text-align: left;
+    padding: 10px 10px 20px;
+    background: #fff;
+}
+[data-vitrine] .product__estante .content__product .price-group .price{
+    height: 11px;
+    font-size: 11px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.31;
+    letter-spacing: normal;
+    text-align: left;
+    color: #818181;
+}
+[data-vitrine] .product__estante .content__product .price-group .special-price{
+    height: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.08;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ff6100;
+}
+[data-vitrine] .product__estante .content__product .price-group .discount-cc{
+    height: 24px;
+    font-size: 11px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000000;
+}
+
 
 [data-vitrine] .product__aspirational {
     list-style: none;

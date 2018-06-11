@@ -5,8 +5,8 @@
 <!-- VITRINE COMUM -->
 
 <div class="container-fluid">
-    <div class="row">
-        <div data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1,"variableWidth": true}' data-vitrine='{"id_vitrine":28595,"produtos_quantidade":15,"tipo":"estante"}'
+    <div class="row geral__estante">
+        <div data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1,"variableWidth": true}' data-vitrine='{"id_vitrine":28595,"produtos_quantidade":15,"tipo":"estante", "link":"teste/colecao/estante" }' 
             data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": "1"}},{"breakpoint": 1023,"settings": {"slidesToShow": "1"}},{"breakpoint": 767,"settings": {"slidesToShow": "1"}},{"breakpoint": 424,"settings": {"slidesToShow": "1"}}]'></div>
     </div>
     <div class="row">
@@ -14,9 +14,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -270,9 +267,9 @@
             tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : htmlShowcase = htmlShowcaseEstante
 
             $(el).append(htmlShowcase);
-            tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div>teste</div>')) : "" : ""
+            var linkVitrine = $(el).data('vitrine').link
+            tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div class="product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/'+ linkVitrine +'">ver todos os produtos</a></div>')) : null : null
             
-
         });
 
 
@@ -346,7 +343,7 @@
             if (parce1.value_with_discount === parce2.nominal) {
                 return '';
             }
-            return 'Em ' + parce1.qty_installments_with_discount + 'x no cartÃ£o';
+            return 'Em ' + parce1.qty_installments_with_discount + 'x no cartão';
         }
 
         function validInstallmente2(parce1, parce2) {
@@ -361,9 +358,9 @@
         function validSaraiva(sara) {
             var num = parseInt(sara.qty_installments_with_discount);
             if (num === sara.qty_installments_without_fee) {
-                return 'CartÃ£o Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span>';
+                return 'Cartão Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span>';
             } else {
-                return 'CartÃ£o Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span> <span class="vProduct-percentDiscount">(-' + sara.discount_percent + '%)</span> ou em atÃ© ' + sara.qty_installments_without_fee + 'x de R$ ' + sara.value_installments_without_fee + ' sem juros';
+                return 'Cartão Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span> <span class="vProduct-percentDiscount">(-' + sara.discount_percent + '%)</span> ou em atÃ© ' + sara.qty_installments_without_fee + 'x de R$ ' + sara.value_installments_without_fee + ' sem juros';
             }
         }
 
@@ -616,6 +613,10 @@
             !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('load-vitrine')) : ''
             $this.addClass('active').siblings().removeClass('active')
         })
+
+        // href replace
+
+
 
         // Document.ready
         loadSlicks()

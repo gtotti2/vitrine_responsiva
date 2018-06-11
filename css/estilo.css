@@ -1,5 +1,5 @@
 body{
-    background: #ccc;
+    background: #efefef;
 }
 [data-menu-vitrine] {
     min-height: 350px;
@@ -449,7 +449,6 @@ body{
     font-weight: bold;
     z-index: 1;
 }
-
 [data-vitrine] .product__estante figure {
     margin: 0 auto;
     display: table;
@@ -520,8 +519,39 @@ body{
     text-align: left;
     color: #000000;
 }
-
-
+[data-vitrine] .product__estante--cta-ver-todos {
+    margin: 10px auto 0;
+    display: table;
+    border: 1px solid #1d6dff;
+    border-radius: 5px;
+    background-color: #efefef;
+    max-height: 345px;
+}
+[data-vitrine] .product__estante--cta-ver-todos a {
+    color: #1d6dff;
+    display: table-cell;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 105px;
+    padding: 0 40px;
+}
+[data-vitrine] .product__estante--cta-ver-todos a:before {
+    content: "+";
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px;
+    font-size: 40px;
+    font-weight: 200;
+    width: 40px;
+    height: 40px;
+    border: 1px solid;
+    border-radius: 65px;
+    line-height: 40px;
+}
 [data-vitrine] .product__aspirational {
     list-style: none;
     display: inline-block;

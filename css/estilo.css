@@ -390,6 +390,7 @@ body{
 [data-vitrine] .slick-dots {
     padding: 0;
     bottom: -12px;
+    clear: both;
 }
 
 [data-vitrine] .slick-dots li {
@@ -485,6 +486,7 @@ body{
     text-align: left;
     padding: 10px;
     background: #fff;
+    min-height: 105px;
 }
 [data-vitrine] .product__estante .content__product .price-group .price{
     height: 11px;
@@ -526,6 +528,7 @@ body{
     border-radius: 5px;
     background-color: #efefef;
     max-height: 335px;
+    min-height: 347px;
 }
 [data-vitrine] .product__estante--cta-ver-todos a {
     color: #1d6dff;
@@ -536,7 +539,7 @@ body{
     text-transform: uppercase;
     text-decoration: none;
     vertical-align: middle;
-    width: 105px;
+    width: 190px;
     padding: 0 40px;
 }
 [data-vitrine] .product__estante--cta-ver-todos a:before {

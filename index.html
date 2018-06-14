@@ -653,10 +653,11 @@
                     var $this = $(this).find('figcaption')
                     str = $this.find('.discount-cc').text()
                     var textSub = str.substring(0, 30);
+                    console.log($this,$this.height())
                     $this.height() > 70 ? $this.find('.discount-cc').text(textSub + ' ...') : ''
                 })
             } else {
-                setTimeout(checkForChanges, 200);
+                setTimeout(checkForChanges, 300);
             }
         }
 

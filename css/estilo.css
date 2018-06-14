@@ -2,7 +2,6 @@ body{
     background: #efefef;
 }
 [vitrine-container]{
-    max-width: 1360px;
     position: relative;
     margin: 0 auto;
 }

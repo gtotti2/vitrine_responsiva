@@ -5,12 +5,42 @@
 <!-- VITRINE COMUM -->
 
 <div class="container-fluid">
-    <div class="row geral__estante">
-        <div data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1,"variableWidth": true}' data-vitrine='{"id_vitrine":28595,"produtos_quantidade":15,"tipo":"estante", "link":"teste/colecao/estante" }' 
-            data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": "1"}},{"breakpoint": 1023,"settings": {"slidesToShow": "1"}},{"breakpoint": 767,"settings": {"slidesToShow": "1"}},{"breakpoint": 424,"settings": {"slidesToShow": "1"}}]'></div>
+    <div class="row geral__estante" vitrine-container>
+        <div data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1,"variableWidth": true}' data-vitrine='{"id_vitrine":28595,"produtos_quantidade":15,"tipo":"estante", "link":"teste/colecao/estante" }'
+            data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": 1}},{"breakpoint": 1023,"settings": {"slidesToShow": 1}},{"breakpoint": 767,"settings": {"slidesToShow": 1}},{"breakpoint": 424,"settings": {"slidesToShow": 1}}]'></div>
     </div>
-    <div class="row">
-        <div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"comum"}' data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 4}' data-responsivo>
+    <div class="row" vitrine-container>
+        <div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"comum"}' data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 4}'
+            data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": 4}},{"breakpoint": 1023,"settings": {"slidesToShow": 3}},{"breakpoint": 767,"settings": {"slidesToShow": 2}},{"breakpoint": 424,"settings": {"slidesToShow": 1}}]'>
+        </div>
+    </div>
+    <div class="row" vitrine-container>
+        <div data-menu-vitrine="horizontal">
+            <ul class="loja-adm__livros-menu">
+                <li class="active" data-id-vitrine="28503">
+                    <a href="https://www.saraiva.com.br/livros/administracao/pre-vendas">
+                        Pré-vendas
+                    </a>
+                </li>
+
+                <li data-id-vitrine="28503">
+                    <a href="https://www.saraiva.com.br/livros/administracao/mais-vendidos">
+                        Mais Vendidos
+                    </a>
+                </li>
+
+                <li data-id-vitrine="28503">
+                    <a href="https://www.saraiva.com.br/livros/administracao/lancamentos">
+                        Lançamentos
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div data-vitrine='{"id_vitrine":28504,"produtos_quantidade":15,"tipo":"comum"}' data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 4}'
+            data-responsivo>
+        </div>
+        <div data-button-vitrine>
+            <a href="https://www.saraiva.com.br/livros/administracao/pre-vendas">Ver todos os produtos</a>
         </div>
     </div>
 </div>
@@ -268,8 +298,8 @@
 
             $(el).append(htmlShowcase);
             var linkVitrine = $(el).data('vitrine').link
-            tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div class="product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/'+ linkVitrine +'">ver todos os produtos</a></div>')) : null : null
-            
+            tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div class="product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + linkVitrine + '">ver todos os produtos</a></div>')) : null : null
+
         });
 
 
@@ -539,12 +569,14 @@
         //instruções default
         var responsiveOptionsDefault = [{ breakpoint: 1439, settings: { slidesToShow: 4 } }, { breakpoint: 1023, settings: { slidesToShow: 3 } }, { breakpoint: 767, settings: { slidesToShow: 2 } }, { breakpoint: 424, settings: { slidesToShow: 1 } }],
             slickOptionsDefault = { mobileFirst: true, infinite: false, dots: true, responsive: responsivo ? responsivo : responsiveOptionsDefault },
-            mobileScreen = $(window).width() <= 768
-        slickOptionsEstante = { dots: true, infinite: true, speed: 300, slidesToShow: 1, centerMode: true, variableWidth: true }
+            mobileScreen = $(window).width() <= 768,
+            slickOptionsEstante = { dots: true, infinite: true, speed: 300, slidesToShow: 1, centerMode: true, variableWidth: true }
 
 
         // Se não possuir slick options e não possuir slick options responsiva carregar instruções default
-        !slickOptions ? slickOptions = slickOptionsDefault : slickOptions.responsive == undefined ? slickOptions.responsive = responsiveOptionsDefault : slickOptions.responsive
+
+
+        !slickOptions ? slickOptions = slickOptionsDefault : !responsivo ? slickOptions.responsive = responsiveOptionsDefault : responsivo == "nulo" ? delete slickOptions.responsive : slickOptions.responsive = responsivo
 
         data.tipo == "estante" ? delete slickOptions.responsive : slickOptions
         // Carregar 5 itens apenas no mobile
@@ -608,19 +640,37 @@
             dataTrack(e.currentTarget)
         });
 
-        $('[data-menu-vitrine] li').click(function () {
+        $('[data-menu-vitrine] li').click(function (e) {
+            e.preventDefault()
             var $this = $(this)
-            !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('load-vitrine')) : ''
+            var thisUrl = $(this).children().attr('href')
+            !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('id-vitrine')) : ''
             $this.addClass('active').siblings().removeClass('active')
+            $this.closest('.row').find('[data-button-vitrine]').children('a').attr('href', thisUrl)
         })
 
-        // href replace
+        function checkForChanges() {
+            if ($('[data-vitrine]').find('.product__estante').length) {
+                $('[data-vitrine].estante').each(function () {
+                    var $this = $(this).find('figcaption')
+                    str = $this.find('.discount-cc').text()
+                    var textSub = str.substring(0, 30);
+                    $this.height() > 70 ? $this.find('.discount-cc').text(textSub + ' ...') : ''
+                })
+            } else {
+                setTimeout(checkForChanges, 200);
+            }
+        }
 
-
-
-        // Document.ready
         loadSlicks()
+        checkForChanges()
         width = $(window).width()
+
+
+
+
+
+
     })
 
 

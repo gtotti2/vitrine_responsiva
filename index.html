@@ -574,10 +574,9 @@
 
 
         // Se não possuir slick options e não possuir slick options responsiva carregar instruções default
-
-
+        slickOptions.mobileFirst == false ? slickOptions.mobileFirst : slickOptions.mobileFirst = true 
         !slickOptions ? slickOptions = slickOptionsDefault : !responsivo ? slickOptions.responsive = responsiveOptionsDefault : responsivo == "nulo" ? delete slickOptions.responsive : slickOptions.responsive = responsivo
-
+        
         data.tipo == "estante" ? delete slickOptions.responsive : slickOptions
         // Carregar 5 itens apenas no mobile
         mobileScreen ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade

@@ -546,8 +546,7 @@ body{
     border: 1px solid #1d6dff;
     border-radius: 5px;
     background-color: #efefef;
-    max-height: 335px;
-    min-height: 347px;
+    min-height: 327px;
 }
 [data-vitrine] .product__estante--cta-ver-todos a {
     color: #1d6dff;

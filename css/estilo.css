@@ -601,16 +601,15 @@ body{
     padding: 0 40px;
 }
 [data-vitrine] .product__estante--cta-ver-todos a:before {
-    background: url(data:image/svg+xml;utf8,<svg id="ad9ad150-4899-4785-be5a-4efc3e504c17" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><title>outros</title><path d="M127.09,32.78a96.59,96.59,0,1,0,96.59,96.59A96.7,96.7,0,0,0,127.09,32.78Z" style="fill:none;stroke:#14171c;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/><line x1="127.09" y1="83.61" x2="127.09" y2="175.14" style="fill:none;stroke:#14171c;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/><line x1="172.86" y1="129.38" x2="81.33" y2="129.38" style="fill:none;stroke:#14171c;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/></svg>);
     content: "";
-    stroke: red;
+    background: url('data:image/svg+xml;utf8,<svg id="ad9ad150-4899-4785-be5a-4efc3e504c17" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><title>outros</title><path d="M127.09,32.78a96.59,96.59,0,1,0,96.59,96.59A96.7,96.7,0,0,0,127.09,32.78Z" style="fill:none;stroke:#1d6dff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/><line x1="127.09" y1="83.61" x2="127.09" y2="175.14" style="fill:none;stroke:#1d6dff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/><line x1="172.86" y1="129.38" x2="81.33" y2="129.38" style="fill:none;stroke:#1d6dff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px"/></svg>');
     display: block;
     text-align: center;
     margin: 0 auto 10px;
     font-size: 40px;
     font-weight: 200;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     line-height: 40px;
 }
 [data-vitrine] .product__aspirational {

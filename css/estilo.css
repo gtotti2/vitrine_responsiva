@@ -612,6 +612,65 @@ body{
     height: 60px;
     line-height: 40px;
 }
+
+
+.vitrine__classicos [data-vitrine] li.destaques__box{
+    margin: 0 10px;
+}
+.vitrine__classicos [data-vitrine] li.destaques__box a {
+    background: #fff;
+    display: inline-block;
+    border-radius: 5px;
+    text-decoration: none;
+    outline: transparent;
+}
+.vitrine__classicos [data-vitrine] .box__img-prod {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    width: 38%;
+    max-width: 210px;
+    height: auto;
+    background-size: cover;
+}
+.vitrine__classicos [data-vitrine] .box__img-prod img{
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.vitrine__classicos [data-vitrine] .box__book{
+    display: inline-block;
+    width: 62%;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.vitrine__classicos [data-vitrine] .box__book .box__centralizado{
+    padding: 0px 8%;
+    text-align: left;
+}
+.vitrine__classicos [data-vitrine] a .box__book h3{
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+}
+.vitrine__classicos [data-vitrine] a .box__book small{
+    color: #666666;
+}
+.vitrine__classicos [data-vitrine] a .box__book p{
+    font-size: 13px;
+    margin: 10px 0 14px 0;
+    color: #191919;
+}
+.vitrine__classicos [data-vitrine] a .box__book button.cta {
+    background-color: #fedc1a;
+    width: 135px;
+    padding: 5px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 [data-vitrine] .product__aspirational {
     list-style: none;
     display: inline-block;

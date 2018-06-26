@@ -12,6 +12,11 @@
             data-responsivo='[{"breakpoint": 1439,"settings": {"slidesToShow": 4}},{"breakpoint": 1023,"settings": {"slidesToShow": 3}},{"breakpoint": 767,"settings": {"slidesToShow": 2}},{"breakpoint": 424,"settings": {"slidesToShow": 1}}]'>
         </div>
     </div>
+    <div class="row vitrine__classicos" vitrine-container>
+        <ul data-vitrine='{"id_vitrine":28749,"produtos_quantidade":6,"tipo":"classicos"}' data-slick-options='{"dots": true, "infinite": false,"slidesToShow": 1, "slidesToScroll": 1}'
+            data-responsivo='[{"breakpoint": 1025,"settings": {"slidesToShow": 2, "dots": false, "slidesToScroll": 1, "arrows": true}}]'>
+        </ul>
+    </div>
     <div class="row" vitrine-container>
         <div data-menu-vitrine="horizontal">
             <ul class="loja-adm__livros-menu">
@@ -117,6 +122,20 @@
                 }
                 return shortText;
             }
+
+            function doTruncarStrClassicos(str, size){
+                if (str==undefined || str=='undefined' || str =='' || size==undefined || size=='undefined' || size ==''){
+                  return str;
+                }
+                var shortText = str;
+                
+                if(str.length >= size+3){
+                    $(window).width() < 425 ? size = 50 : size
+                    shortText = str.substring(0, size).replace(/\./g,'. ').concat('...');
+                }
+                console.log($(window).width() < 425)
+                return shortText
+              }
 
             function validateSale(sale) {
                 if (sale > 0) {
@@ -272,6 +291,7 @@
                 '</div>' +
                 '</div>' +
                 '</li>';
+
             htmlShowcaseEstante =
                 '<div class="product__estante" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
                 '<a href="' + showcaseProducts.url + '" data-track="click">' +
@@ -292,7 +312,24 @@
                 '</a>' +
                 '</div>';
 
-            tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : htmlShowcase = htmlShowcaseEstante
+            htmlShowcaseClassicos = 
+            '<li class="destaques__box" data-track="true" data-track-list="'+ productObj.list +'"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id +'" data-track-price="'+ productObj.price +'" data-track-brand="'+ productObj.brand +'"  data-track-category="'+ productObj.category +'" data-track-variant="'+ productObj.variant +'" data-track-position="'+ productObj.position +'" data-track-vitrine="'+ productObj.vitrine +'">' +
+                '<a href="' + showcaseProducts.url +'" data-track="click">' +
+                    '<div class="box__img-prod">' +
+                        '<img src="' + showcaseProducts.image + '200&a=-1" title="'+ showcaseProducts.name +'" />' +
+                    '</div>' +
+                    '<div class="box__book">' +
+                        '<div class="box__centralizado">' +
+                            '<h3>' + doTruncarStrClassicos(showcaseProducts.name, 40) + '</h3>' +
+                            '<small>' + (showcaseProducts.brand) + '</small>' +
+                            '<p>' + doTruncarStrClassicos(showcaseProducts.description, 420) + '</p>' +
+                            '<button class="cta">CONFIRA</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</a>' +    
+            '</li>';    
+
+            tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
             $(el).append(htmlShowcase);
             var linkVitrine = $(el).data('vitrine').link

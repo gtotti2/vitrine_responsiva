@@ -613,9 +613,13 @@ body{
     line-height: 40px;
 }
 
-
-.vitrine__classicos [data-vitrine] li.destaques__box{
+.vitrine__classicos [data-vitrine]{
+    min-height: initial;
+}
+.vitrine__classicos [data-vitrine] li.destaques__box {
     margin: 0 10px;
+    max-height: 325px;
+    outline: transparent;
 }
 .vitrine__classicos [data-vitrine] li.destaques__box a {
     background: #fff;

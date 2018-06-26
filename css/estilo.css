@@ -1172,8 +1172,3 @@ body {
     }
 }
 
-@media screen and (min-width: 1440px) {
-    .vitrine__classicos [data-vitrine] .box__book {
-        max-width: 68.8%;
-    }
-}

@@ -1165,7 +1165,17 @@ body {
         margin-top: 6px;
     }
 }
-
+@media screen and (max-width: 480px){
+    .vitrine__classicos [data-vitrine] a .box__book h3{
+        font-size: 15px;
+    }
+    .vitrine__classicos [data-vitrine] a .box__book small{
+        font-size: 11px;
+    }
+    .vitrine__classicos [data-vitrine] a .box__book p{
+        font-size: 12px;
+    }
+}
 @media screen and (min-width: 1025px) {
     .vitrine__classicos [data-vitrine] .box__book {
         max-width: 60%;

@@ -1,4 +1,4 @@
-var $ = jQuery;
+    var $ = jQuery;
     function vitrineLoader(lista, el) {
         var showcaseProducts,
             htmlShowcase,
@@ -79,7 +79,6 @@ var $ = jQuery;
                     $(window).width() < 425 ? size = 50 : size
                     shortText = str.substring(0, size).replace(/\./g,'. ').concat('...');
                 }
-                console.log($(window).width() < 425)
                 return shortText
               }
 
@@ -268,7 +267,7 @@ var $ = jQuery;
                         '<div class="box__centralizado">' +
                             '<h3>' + doTruncarStrClassicos(showcaseProducts.name, 40) + '</h3>' +
                             '<small>' + (showcaseProducts.brand) + '</small>' +
-                            '<p>' + doTruncarStrClassicos(showcaseProducts.description, 420) + '</p>' +
+                            '<p>' + doTruncarStrClassicos(showcaseProducts.description, 260) + '</p>' +
                             '<button class="cta">CONFIRA</button>' +
                         '</div>' +
                     '</div>' +
@@ -647,3 +646,4 @@ var $ = jQuery;
         width = $(window).width()
 
     })
+

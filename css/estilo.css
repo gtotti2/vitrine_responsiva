@@ -734,6 +734,7 @@ body {
     -webkit-box-shadow: 0 0 0 0 #dcdcdd;
     box-shadow: 0 0 0 0 #dcdcdd;
     outline: 1px solid transparent;
+    overflow: hidden;
 }
 
 [data-vitrine] .product__aspirational:hover .container__name, [data-vitrine] .product__aspirational:focus .container__name {

@@ -166,6 +166,7 @@
             }
 
             function limitPrice(price) {
+                console.log(price.length)
                 if (price.length > 60) {
                     return price.substring(0, 57) + '...'
                 } else {
@@ -249,7 +250,7 @@
                 '<div class="preorder">' + validPre(showcaseProducts.presale) + '</div>' +
                 '<div class="price">' + validPrace(showcaseProducts.price_block.price) + '</div>' +
                 '<div class="special-price">R$ ' + showcaseProducts.price_block.credit_card.value_with_discount + '</div>' +
-                '<div class="discount-cc">' + limitPrice(validInstallmente(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price)) +
+                '<div class="discount-cc">' + validInstallmente(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) +
                 '</div>' +
                 '</div>' +
                 '</figcaption > ' +
@@ -634,7 +635,8 @@
                     var $this = $(this)
                     str = $this.find('.discount-cc').text()
                     var textSub = str.substring(0, 26);
-                    $this.height() > 69 ? $this.find('.discount-cc').text(textSub + '...') : ""
+                    console.log($this.height())
+                    $this.height() > 72 ? $this.find('.discount-cc').text(textSub + '...') : ""
                 })
             } else {
                 setTimeout(checkForChanges, 300);

@@ -635,7 +635,8 @@
                     var $this = $(this)
                     str = $this.find('.discount-cc').text()
                     var textSub = str.substring(0, 26);
-                    $this.height() > 72 ? $this.find('.discount-cc').text(textSub + '...') : ""
+                    console.log($this.height())
+                    $this.height() > 73 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
                 })
             } else {
                 setTimeout(checkForChanges, 300);

@@ -490,13 +490,19 @@ body {
 [data-vitrine] .product__estante a {
     text-decoration: none;
     outline: transparent;
+    display: block;
 }
 
-[data-vitrine] .product__estante:hover a {
+[data-vitrine] .product__estante:hover figure:after {
+    content: '';
+    position: absolute;
     -moz-box-shadow: 0 0 10px #CCCCCC;
     -webkit-box-shadow: 0 0 10px #CCCCCC;
     box-shadow: 0 0 10px #CCCCCC;
-    display: block;
+    height: 340px;
+    width: 100%;
+    top: 10px;
+    left: 0;
 }
 
 [data-vitrine] .product__estante .seal {
@@ -505,6 +511,7 @@ body {
     top: 6px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
 }
 
 [data-vitrine] .product__estante .seal.digital:before {
@@ -614,7 +621,12 @@ body {
     border: 1px solid #1d6dff;
     border-radius: 5px;
     background-color: #efefef;
-    min-height: 327px;
+    height: 340px;
+    transition: .3s all;
+    box-sizing: border-box;
+}
+[data-vitrine] .product__estante--cta-ver-todos:hover{
+    border: 3px solid #1d6dff;
 }
 
 [data-vitrine] .product__estante--cta-ver-todos a {
@@ -626,9 +638,11 @@ body {
     text-transform: uppercase;
     text-decoration: none;
     vertical-align: middle;
-    width: 190px;
-    padding: 0 40px;
+    max-width: 110px;
+    padding: 0 20px;
+    outline: none;
 }
+
 
 [data-vitrine] .product__estante--cta-ver-todos a:before {
     content: "";
@@ -642,7 +656,8 @@ body {
     height: 60px;
     line-height: 40px;
 }
-.vitrine__classicos [data-vitrine]{
+
+.vitrine__classicos [data-vitrine] {
     min-height: initial;
 }
 
@@ -1166,20 +1181,21 @@ body {
         margin-top: 6px;
     }
 }
-@media screen and (max-width: 480px){
-    .vitrine__classicos [data-vitrine] a .box__book h3{
+
+@media screen and (max-width: 480px) {
+    .vitrine__classicos [data-vitrine] a .box__book h3 {
         font-size: 15px;
     }
-    .vitrine__classicos [data-vitrine] a .box__book small{
+    .vitrine__classicos [data-vitrine] a .box__book small {
         font-size: 11px;
     }
-    .vitrine__classicos [data-vitrine] a .box__book p{
+    .vitrine__classicos [data-vitrine] a .box__book p {
         font-size: 12px;
     }
 }
+
 @media screen and (min-width: 1025px) {
     .vitrine__classicos [data-vitrine] .box__book {
         max-width: 60%;
     }
 }
-

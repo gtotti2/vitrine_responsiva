@@ -270,8 +270,9 @@ function vitrineLoader(lista, el) {
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
         $(el).append(htmlShowcase);
-        // Adicionar link para coleção depois do último produto
-        tipoVitrine == "estante" ? index == lista.products.length - 1 ? $(el).append($('<div class="product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null : null
+        // Adicionar link para coleção depois do último produto se a resolução for maior/igual que 1024
+
+        tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
     });
 
 
@@ -535,28 +536,46 @@ function slickLoadAjax(thisSlider, id_vitrine) {
         slickOptionsDefault = { mobileFirst: true, infinite: false, dots: true, responsive: responsivo ? responsivo : responsiveOptionsDefault },
         mobileScreen = $(window).width() <= 768,
         slickOptionsEstante = {
+            mobileFirst: true,
+            centerMode: false,
             dots: true,
+            arrows: false,
             infinite: false,
             slidesToShow: 1,
+            slidesToScroll: 3,
             variableWidth: true,
-            
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        arrows: true,
+                        dots: false,
+                        centerMode: false,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    setting: {
+                        centerMode: false,
+                    }
+                }
+            ]
         }
 
     // Se não possuir slick options e não possuir slick options responsiva carregar instruções default
     slickOptions.mobileFirst == false ? slickOptions.mobileFirst : slickOptions.mobileFirst = true
     !slickOptions ? slickOptions = slickOptionsDefault : !responsivo ? slickOptions.responsive = responsiveOptionsDefault : responsivo == "nulo" ? delete slickOptions.responsive : slickOptions.responsive = responsivo
 
-    data.tipo == "estante" ? (slickOptions = slickOptionsEstante, delete slickOptions.responsive) : slickOptions
+    data.tipo == "estante" ? slickOptions = slickOptionsEstante : slickOptions
     // Carregar 5 itens apenas no mobile
     mobileScreen ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade
 
-    
+
     function callAjax() {
         $.ajax({
             url: 'https://api.saraiva.com.br/collection/products/' + id_vitrine + '/0/0/1?l=' + data.produtos_quantidade,
             type: 'GET'
         }).done(function (data) {
-            slickOptions.variableWidth ? $(window).width() <= 1024 ? (slickOptions.centerMode = true, slickOptions.slidesToShow = 1) : slickOptions.slidesToShow = Math.round((data.total_count + 1) / 2) : slickOptions.variableWidth
             vitrineLoader(data, thisSlider)
             $(thisSlider).fadeIn('fast', function () {
             }).slick(slickOptions).addClass('active')

@@ -451,6 +451,10 @@ body {
     clear: both;
 }
 
+[data-vitrine].estante .slick-dots{
+    bottom: 0;
+}
+
 [data-vitrine] .slick-dots li {
     display: inline-block;
     width: 0.8em;
@@ -499,10 +503,12 @@ body {
     -moz-box-shadow: 0 0 10px #CCCCCC;
     -webkit-box-shadow: 0 0 10px #CCCCCC;
     box-shadow: 0 0 10px #CCCCCC;
-    height: 340px;
+    height: calc(100% - 10px);
     width: 100%;
     top: 10px;
     left: 0;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 [data-vitrine] .product__estante .seal {
@@ -638,7 +644,7 @@ body {
     text-transform: uppercase;
     text-decoration: none;
     vertical-align: middle;
-    max-width: 110px;
+    max-width: 180px;
     padding: 0 20px;
     outline: none;
 }

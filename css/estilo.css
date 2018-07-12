@@ -120,7 +120,9 @@ body {
     background-color: #ddd;
     border: 0;
 }
-
+[data-vitrine] .slick-arrow.slick-disabled{
+    opacity: .3;
+}
 [data-vitrine] .slick-arrow.slick-next:hover {
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#ffffff' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
     background-size: 70%;
@@ -490,6 +492,9 @@ body {
     margin: 0 10px;
     outline: transparent;
 }
+[data-vitrine] .product__estante.slick-cloned{
+    display: none;
+}
 
 [data-vitrine] .product__estante a {
     text-decoration: none;
@@ -497,18 +502,20 @@ body {
     display: block;
 }
 
+
 [data-vitrine] .product__estante:hover figure:after {
     content: '';
     position: absolute;
     -moz-box-shadow: 0 0 10px #CCCCCC;
     -webkit-box-shadow: 0 0 10px #CCCCCC;
     box-shadow: 0 0 10px #CCCCCC;
-    height: calc(100% - 10px);
+    height: 100%;
     width: 100%;
     top: 10px;
     left: 0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    max-height: 340px;
 }
 
 [data-vitrine] .product__estante .seal {
@@ -626,13 +633,8 @@ body {
     display: table;
     border: 1px solid #1d6dff;
     border-radius: 5px;
-    background-color: #efefef;
     height: 340px;
     transition: .3s all;
-    box-sizing: border-box;
-}
-[data-vitrine] .product__estante--cta-ver-todos:hover{
-    border: 3px solid #1d6dff;
 }
 
 [data-vitrine] .product__estante--cta-ver-todos a {
@@ -644,7 +646,7 @@ body {
     text-transform: uppercase;
     text-decoration: none;
     vertical-align: middle;
-    max-width: 180px;
+    max-width: 130px;
     padding: 0 20px;
     outline: none;
 }

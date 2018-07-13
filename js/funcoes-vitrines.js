@@ -266,13 +266,15 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</a>' +
             '</li>';
-
+        
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
-        $(el).append(htmlShowcase);
-        // Adicionar link para coleção depois do último produto se a resolução for maior/igual que 1024
+        $(el).append(htmlShowcase)
 
-        tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
+        // Adicionar link para coleção depois do último produto se a resolução for maior/igual que 1024
+        $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
+        
+        
     });
 
 
@@ -642,7 +644,8 @@ $(document).ready(function () {
                 var $this = $(this)
                 str = $this.find('.discount-cc').text()
                 var textSub = str.substring(0, 26);
-                $this.height() > 73 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
+                
+                //$this.find('.price-group').outerHeight() >= 71 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
             })
         } else {
             setTimeout(checkForChanges, 300);

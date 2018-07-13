@@ -6,6 +6,9 @@ body {
     position: relative;
     margin: 0 auto;
 }
+[vitrine-container] .slick-list {
+    min-height: 350px;
+}
 
 [data-menu-vitrine] {
     margin: 20px 0px;
@@ -515,7 +518,7 @@ body {
     left: 0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    max-height: 340px;
+    max-height: 333px;
 }
 
 [data-vitrine] .product__estante .seal {
@@ -590,6 +593,7 @@ body {
 
 [data-vitrine] .product__estante .content__product .price-group {
     text-align: left;
+    overflow: hidden;
 }
 
 [data-vitrine] .product__estante .content__product .price-group .price {
@@ -633,7 +637,7 @@ body {
     display: table;
     border: 1px solid #1d6dff;
     border-radius: 5px;
-    height: 340px;
+    height: 333px;
     transition: .3s all;
 }
 
@@ -646,8 +650,8 @@ body {
     text-transform: uppercase;
     text-decoration: none;
     vertical-align: middle;
-    max-width: 130px;
-    padding: 0 20px;
+    max-width: 180px;
+    padding: 0 10px;
     outline: none;
 }
 

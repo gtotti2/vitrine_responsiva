@@ -51,10 +51,10 @@ function vitrineLoader(lista, el) {
 
         function fixImageUrl(productInfo) {
             let valueSplitted = productInfo.image.split(".")
-            if (valueSplitted[valueSplitted.length - 1] != "jpg" || productInfo.type_id != "grouped") {
-                return productInfo.image + "300&a=-1"
-            } else {
+            if (productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg" ) {
                 return productInfo.image
+            } else {
+                return productInfo.image + "300&a=-1"
             }
         }
 
@@ -89,9 +89,8 @@ function vitrineLoader(lista, el) {
             return '';
         };
 
-        function validAuthors(author) {
-            author.length ? author : "..."
-            return ''
+        function validAuthors(authors,data) {
+            return (authors.length) ? authors[0].name : data.brand 
         }
 
         function funcRating(rating) {
@@ -198,7 +197,7 @@ function vitrineLoader(lista, el) {
             '<div class="content__text">' +
             '<a href="' + showcaseProducts.url + '" data-track="click">' +
             '<span class="title">' + doTruncarStr(showcaseProducts.name, 40) + '</span>' +
-            '<span class="subtitle">' + validAuthors(showcaseProducts.authors) + '</span>' +
+            '<span class="subtitle">' + validAuthors(showcaseProducts.authors,showcaseProducts)  + '</span>' +
             '</a>' +
             '<div class="ratings">' +
             '<a href="' + showcaseProducts.url + '" title="' + showcaseProducts.name + '" data-track="click">' +
@@ -266,15 +265,14 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</a>' +
             '</li>';
-        
+
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
         $(el).append(htmlShowcase)
 
-        // Adicionar link para coleção depois do último produto se a resolução for maior/igual que 1024
-        $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
-        
-        
+        tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
+
+
     });
 
 
@@ -571,13 +569,13 @@ function slickLoadAjax(thisSlider, id_vitrine) {
             url: 'https://api.saraiva.com.br/collection/products/' + id_vitrine + '/0/0/1?l=' + data.produtos_quantidade,
             type: 'GET'
         }).done(function (data) {
-            function formattedEstanteView(dataSlickOptions,data){
+            function formattedEstanteView(dataSlickOptions, data) {
                 console.log(dataSlickOptions)
                 // var total
                 // $(window).width() <= 1024 ?  total = 5 : total = data.total_count + 1 
                 // return(dataSlickOptions.slidesToScroll = total , dataSlickOptions.slidesToShow = total)
             }
-            thisSlider.data('vitrine').tipo == "estante" ? formattedEstanteView(slickOptions,data) : null
+            thisSlider.data('vitrine').tipo == "estante" ? formattedEstanteView(slickOptions, data) : null
             vitrineLoader(data, thisSlider)
             $(thisSlider).fadeIn('fast', function () {
             }).slick(slickOptions).addClass('active')
@@ -644,7 +642,7 @@ $(document).ready(function () {
                 var $this = $(this)
                 str = $this.find('.discount-cc').text()
                 var textSub = str.substring(0, 26);
-                
+
                 //$this.find('.price-group').outerHeight() >= 71 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
             })
         } else {

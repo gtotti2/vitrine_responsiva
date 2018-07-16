@@ -360,11 +360,7 @@ body {
 
 [data-vitrine] .content__saraiva-card {
     font-size: 10px;
-    padding: 10px 5px;
-    height: 34px;
     text-align: center;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -382,7 +378,7 @@ body {
     vertical-align: middle;
 }
 
-[data-vitrine] .product__content .content__category {
+[data-vitrine] .content__category {
     clear: both;
     float: left;
     height: 22px;
@@ -393,7 +389,7 @@ body {
     position: relative;
 }
 
-[data-vitrine] .product__content .content__category img {
+[data-vitrine] .content__category img {
     position: absolute;
     display: block;
     margin: 0 auto;

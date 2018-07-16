@@ -51,7 +51,7 @@ function vitrineLoader(lista, el) {
 
         function fixImageUrl(productInfo) {
             let valueSplitted = productInfo.image.split(".")
-            if (productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg" ) {
+            if (productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg") {
                 return productInfo.image
             } else {
                 return productInfo.image + "300&a=-1"
@@ -89,8 +89,8 @@ function vitrineLoader(lista, el) {
             return '';
         };
 
-        function validAuthors(authors,data) {
-            return (authors.length) ? authors[0].name : data.brand 
+        function validAuthors(authors, data) {
+            return (authors.length) ? authors[0].name : data.brand
         }
 
         function funcRating(rating) {
@@ -137,6 +137,7 @@ function vitrineLoader(lista, el) {
         }
 
         function validSaraiva(sara) {
+            
             if (sara.discount_percent == 0 && sara.total_value_installments_with_fee == '0,00') {
                 return ' em ' + sara.qty_installments_with_discount + 'x sem juros no Cartão Saraivas';
             } else if (sara.discount_percent == 0) {
@@ -145,11 +146,8 @@ function vitrineLoader(lista, el) {
             return ' R$ ' + sara.value_with_discount + '   <span class="vProduct-percentDiscount">(' + sara.discount_percent + '% de desconto)</span> no Cartão Saraiva';
         }
 
-        function validateOnSale(onSale) {
-            if (onSale && onSale.category) {
-                return '<img src="' + onSale.category.url + '" title=""> ';
-            }
-            return '';
+        function validateOnSale(onSale, data) {
+            return (onSale.length && onSale[0].category) ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.text}">` : ''
         }
 
         function limitTitleShowcase(title) {
@@ -162,6 +160,10 @@ function vitrineLoader(lista, el) {
 
         function sobEncomenda(status) {
             return status ? status : false
+        }
+
+        function urgencyTag(urgency){
+            return urgency ? '' : ''
         }
 
 
@@ -182,6 +184,7 @@ function vitrineLoader(lista, el) {
             '</div>';
 
         htmlShowcase = '<div class="product__comum" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
+            urgencyTag(showcaseProducts.rule_urgency) + 
             '<div class="product__content">' +
             '<div class="content__left">' +
             '<figure>' +
@@ -197,7 +200,7 @@ function vitrineLoader(lista, el) {
             '<div class="content__text">' +
             '<a href="' + showcaseProducts.url + '" data-track="click">' +
             '<span class="title">' + doTruncarStr(showcaseProducts.name, 40) + '</span>' +
-            '<span class="subtitle">' + validAuthors(showcaseProducts.authors,showcaseProducts)  + '</span>' +
+            '<span class="subtitle">' + validAuthors(showcaseProducts.authors, showcaseProducts) + '</span>' +
             '</a>' +
             '<div class="ratings">' +
             '<a href="' + showcaseProducts.url + '" title="' + showcaseProducts.name + '" data-track="click">' +
@@ -218,11 +221,11 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</div>' +
             '</div>' +
+            '<div class="content__category">' + validateOnSale(showcaseProducts.on_sale, showcaseProducts) + '</div>' +
             '<div class="content__saraiva-card">' +
             '<svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cartao-saraiva"><svg id="icon-cartao-saraiva" viewBox="0 0 256 256" width="100%" height="100%"><title>Artboard 22</title><path d="M214.72 220.51a3.32 3.32 0 0 1 0-6.63 26.85 26.85 0 0 0 26.82-26.82 3.32 3.32 0 1 1 6.63 0 33.49 33.49 0 0 1-33.45 33.45zM41.73 220.51a33.49 33.49 0 0 1-33.45-33.44 3.32 3.32 0 1 1 6.63 0 26.84 26.84 0 0 0 26.82 26.82 3.32 3.32 0 0 1 0 6.63zM11.6 80.57a3.31 3.31 0 0 1-3.32-3.32 33.49 33.49 0 0 1 33.45-33.46 3.32 3.32 0 0 1 0 6.63 26.85 26.85 0 0 0-26.82 26.83 3.31 3.31 0 0 1-3.31 3.32zM244.85 80.57a3.31 3.31 0 0 1-3.32-3.32 26.86 26.86 0 0 0-26.82-26.83 3.32 3.32 0 0 1 0-6.63 33.49 33.49 0 0 1 33.46 33.46 3.31 3.31 0 0 1-3.32 3.32z"></path><path d="M244.85 190.38a3.31 3.31 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 220.51h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63zM11.6 190.38a3.32 3.32 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 50.42h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63z"></path><path d="M244.85 91.15H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM244.85 118.56H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM69.86 135.47H32.17a3.32 3.32 0 0 1 0-6.63h37.69a3.32 3.32 0 1 1 0 6.63z"></path><path fill="#1d1d1b" d="M215.82 136.85l-44.66 8.6 8.59 44 44.66-8.57-8.59-44.03z"></path><g clip-path="url(#a)"><path d="M126.34 155.61l6.34 33.45c15.63-11.2 30.12-13.19 37-8.05l-6.79-33.74c-4.52-4.42-20.67-4.93-36.57 8.34m-4.79-1.69c15.71-14.74 39.37-18.55 45.48-8l8.72 44.73c-8.23-10.21-24.2-11.26-45.91 6.23z" fill="#1d1d1b"></path></g></svg></use></svg>' +
-            '<span class="saraiva-card__info"> ' + validSaraiva(showcaseProducts.price_block.saraiva_card) + '</span>' +
+            '<span class="saraiva-card__info">' + validSaraiva(showcaseProducts.price_block.saraiva_card) + '</span>' +
             '</div>' +
-            '<div class="content__category">' + validateOnSale(showcaseProducts.on_sale) + '</div>' +
             '<div class="content__action">' +
             '<button type="button" title="Comprar" class="' + classBtnDefault + '" data-sku="' + showcaseProducts.sku + '" id="btn-cart">Adicionar ao Carrinho</button>' +
             '</div>' +
@@ -267,7 +270,7 @@ function vitrineLoader(lista, el) {
             '</li>';
 
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
-
+        
         $(el).append(htmlShowcase)
 
         tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
@@ -349,9 +352,10 @@ function htmlModal(product, id, sob, element) {
         }
         return '';
     }
-
+    
     function validSaraiva(sara) {
-        var num = parseInt(sara.qty_installments_with_discount);
+        
+        var num = parseInt(sara.qty_installments_with_discount,10);
         if (num === sara.qty_installments_without_fee) {
             return 'Cartão Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span>';
         } else {

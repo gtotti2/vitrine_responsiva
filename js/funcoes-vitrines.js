@@ -24,11 +24,11 @@ function vitrineLoader(lista, el) {
         classBtnDefault = 'add-cart check-services btn-secondary btn-full icon icon-carrinho icon-btn';
 
         if (warranty === 'sim' && insurance === 'nao') {
-            classBtnDefault = classBtnDefault + 'product-has-warranty';
+            classBtnDefault = classBtnDefault + ' product-has-warranty';
         } else if (insurance === 'sim' && warranty === 'não') {
-            classBtnDefault = classBtnDefault + 'product-has-insurance';
+            classBtnDefault = classBtnDefault + ' product-has-insurance';
         } else if (warranty === 'sim' && insurance === 'sim') {
-            classBtnDefault = classBtnDefault + 'product-has-warranty product-has-insurance';
+            classBtnDefault = classBtnDefault + ' product-has-warranty product-has-insurance';
         }
 
         var productObj = {
@@ -147,7 +147,8 @@ function vitrineLoader(lista, el) {
         }
 
         function validateOnSale(onSale, data) {
-            return (onSale.length && onSale[0].category) ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.text}">` : ''
+            return ""
+            //return (onSale.length && onSale[0].category) ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.text}">` : ''
         }
 
         function limitTitleShowcase(title) {
@@ -162,8 +163,13 @@ function vitrineLoader(lista, el) {
             return status ? status : false
         }
 
-        function urgencyTag(urgency){
-            return urgency ? '' : ''
+        function urgencyTag(id,data){
+            return ""
+            // if(id == 2796131){
+            //     console.log(data)
+            // }
+            // return
+            // return urgency ? '' : ''
         }
 
 
@@ -184,7 +190,7 @@ function vitrineLoader(lista, el) {
             '</div>';
 
         htmlShowcase = '<div class="product__comum" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
-            urgencyTag(showcaseProducts.rule_urgency) + 
+            //urgencyTag(showcaseProducts.id,showcaseProducts) + 
             '<div class="product__content">' +
             '<div class="content__left">' +
             '<figure>' +
@@ -256,7 +262,7 @@ function vitrineLoader(lista, el) {
             '<li class="destaques__box" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
             '<a href="' + showcaseProducts.url + '" data-track="click">' +
             '<div class="box__img-prod">' +
-            '<img src="' + showcaseProducts.image + '200&a=-1" title="' + showcaseProducts.name + '" />' +
+            '<img src="' + fixImageUrl(showcaseProducts) + '" title="' + showcaseProducts.name + '" />' +
             '</div>' +
             '<div class="box__book">' +
             '<div class="box__centralizado">' +

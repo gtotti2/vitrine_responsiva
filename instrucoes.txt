@@ -1,0 +1,23 @@
+Tutorial Git: 
+
+git pull
+
+Atualiza todos os arquivos em relação a versão do servidor
+
+git add * 
+
+Adiciona todas os arquivos modificados dentro de um pacote
+
+git commit -m "Modificações realizadas no arquivo JS"
+
+Comentário para as modificações realizadas
+
+git push
+
+Envia todas as modificações para bit bucket
+
+Comando para execução:  
+
+aws s3 sync . s3://static-saraiva/2018/bibliotecas/vitrines/
+
+Envia todas as modificações para pasta correspondente

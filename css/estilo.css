@@ -6,8 +6,9 @@ body {
     position: relative;
     margin: 0 auto;
 }
+
 [vitrine-container] .slick-list {
-    min-height: 350px;
+    height: auto;
 }
 
 [data-menu-vitrine] {
@@ -123,9 +124,11 @@ body {
     background-color: #ddd;
     border: 0;
 }
-[data-vitrine] .slick-arrow.slick-disabled{
+
+[data-vitrine] .slick-arrow.slick-disabled {
     opacity: .3;
 }
+
 [data-vitrine] .slick-arrow.slick-next:hover {
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#ffffff' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
     background-size: 70%;
@@ -140,53 +143,45 @@ body {
 
 [data-vitrine] .product__comum {
     position: relative;
-    max-width: 95%;
-    text-align: left;
-    height: 315px;
+    text-align: center;
     background: #fff;
-    margin: 5px auto;
+    height: 100%;
+    max-height: 315px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-end;
 }
 
 [data-vitrine] .product__content {
+    box-sizing: border-box;
     position: relative;
-    height: 185px;
-    padding-left: 145px;
-}
-
-[data-vitrine] .product__content:focus {
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
+    padding: 24px 0px 0px;
+    max-height: 184px;
+    text-align: left;
+    display: flex;
+    align-items: center;
 }
 
 [data-vitrine] .product__content .content__left {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: block;
-    width: 130px;
-    height: 164px;
+    display: inline-block;
+    vertical-align: middle;
+    box-sizing: border-box;
     text-align: center;
+    width: 45%;
+    max-width: 155px;
 }
 
 [data-vitrine] .product__content .content__left figure {
     margin: 0;
-}
-
-[data-vitrine] .product__content .content__left figure a {
-    display: inline;
+    padding: 0px 10px 0px 20px;
 }
 
 [data-vitrine] .product__content .content__left figure .content__img {
     width: 100%;
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    position: relative;
 }
 
 [data-vitrine] .product__content .content__left figure .content__img.digital:before {
@@ -207,12 +202,8 @@ body {
 }
 
 [data-vitrine] .product__content .content__left figure img {
-    display: inline-block;
-    margin: auto;
-    width: auto;
-    height: auto;
+    margin: 0;
     max-width: 100%;
-    max-height: 164px;
 }
 
 [data-vitrine] .product__content .content__left figure .tagSale {
@@ -220,12 +211,11 @@ body {
     font-size: 12px;
     font-style: italic;
     font-weight: bold;
-    height: 26px;
-    left: 0;
-    padding: 5px 4px;
+    left: -20px;
+    padding: 6.5px 4px;
     position: absolute;
     text-align: center;
-    bottom: 8px;
+    bottom: 0px;
     width: 48px;
     z-index: 5;
 }
@@ -244,12 +234,13 @@ body {
 }
 
 [data-vitrine] .product__content .content__right {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    padding-left: 8px;
+    position: relative;
+    display: inline-block;
+    max-width: 55%;
+    vertical-align: middle;
+    text-align: left;
+    padding: 0px 20px 0px 10px;
+    box-sizing: border-box;
 }
 
 [data-vitrine] .product__content .content__right .content__text a {
@@ -359,9 +350,8 @@ body {
 }
 
 [data-vitrine] .content__saraiva-card {
-    font-size: 10px;
     text-align: center;
-    box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 [data-vitrine] .content__saraiva-card svg {
@@ -376,17 +366,13 @@ body {
     position: relative;
     display: inline-block;
     vertical-align: middle;
+    font-size: 10px;
 }
 
 [data-vitrine] .content__category {
-    clear: both;
-    float: left;
-    height: 22px;
-    width: 100%;
-    padding: 0;
-    margin: -5px 0 0;
-    text-align: left;
-    position: relative;
+    text-align: center;
+    min-height: 17px;
+    margin: 14px 0px;
 }
 
 [data-vitrine] .content__category img {
@@ -400,10 +386,9 @@ body {
 }
 
 [data-vitrine] .content__action {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    bottom: 0;
+    margin: 0 auto 10px;
     width: calc(100% - 20px);
 }
 
@@ -452,7 +437,7 @@ body {
     clear: both;
 }
 
-[data-vitrine].estante .slick-dots{
+[data-vitrine].estante .slick-dots {
     bottom: 0;
 }
 
@@ -491,7 +476,8 @@ body {
     margin: 0 10px;
     outline: transparent;
 }
-[data-vitrine] .product__estante.slick-cloned{
+
+[data-vitrine] .product__estante.slick-cloned {
     display: none;
 }
 
@@ -500,7 +486,6 @@ body {
     outline: transparent;
     display: block;
 }
-
 
 [data-vitrine] .product__estante:hover figure:after {
     content: '';
@@ -551,7 +536,7 @@ body {
     padding-top: 10px;
 }
 
-[data-vitrine] .product__estante img, figcaption {
+[data-vitrine] .product__estante img, [data-vitrine] .product__estante figcaption {
     display: table-caption;
     caption-side: bottom;
     overflow-y: -webkit-paged-y;
@@ -589,7 +574,6 @@ body {
 
 [data-vitrine] .product__estante .content__product .price-group {
     text-align: left;
-    overflow: hidden;
 }
 
 [data-vitrine] .product__estante .content__product .price-group .price {
@@ -650,7 +634,6 @@ body {
     padding: 0 10px;
     outline: none;
 }
-
 
 [data-vitrine] .product__estante--cta-ver-todos a:before {
     content: "";
@@ -1201,6 +1184,13 @@ body {
         font-size: 12px;
     }
 }
+/* 
+@media screen and (min-width: 480px) and (max-width: 767px) {
+    [data-vitrine] .product__content {
+        max-width: 75%;
+        margin: 0 auto;
+    }
+} */
 
 @media screen and (min-width: 1025px) {
     .vitrine__classicos [data-vitrine] .box__book {

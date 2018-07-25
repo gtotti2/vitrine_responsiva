@@ -14,22 +14,22 @@ body {
 }
 
 [data-menu-vitrine="vertical"] {
-    flex-basis: 20% ;
-}
-[data-menu-vitrine="vertical"] + [data-vitrine] {
-    flex-basis: 80%;
+    flex-basis: 100%;
 }
 
+[data-menu-vitrine="vertical"]+[data-vitrine] {
+    flex-basis: 100%;
+}
 
 [data-menu-vitrine="vertical"] li {
     display: block;
 }
 
-
 [data-menu-vitrine="horizontal"] {
-    flex-basis: 100% ;
+    flex-basis: 100%;
 }
-[data-menu-vitrine="horizontal"] + [data-vitrine] {
+
+[data-menu-vitrine="horizontal"]+[data-vitrine] {
     flex-basis: 100%;
 }
 
@@ -155,14 +155,13 @@ body {
     position: relative;
     text-align: center;
     background: #fff;
-    height: 100%;
-    max-height: 315px;
+    height: 315px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 [data-vitrine] .product__content {
@@ -869,10 +868,15 @@ body {
     border: 1px solid #787878;
 }
 
+[data-vitrine] .modal__product {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 [data-vitrine] .modal__product .fechar {
     width: 100%;
     height: 38px;
-    display: block;
 }
 
 [data-vitrine] .modal__product .fechar-icon {
@@ -885,10 +889,9 @@ body {
 }
 
 [data-vitrine] .left__content {
-    width: 500px;
-    height: 367px;
-    float: left;
+    width: 475px;
     text-align: left;
+    margin-left: 20px;
 }
 
 [data-vitrine] .left__content .title {
@@ -899,17 +902,14 @@ body {
 
 [data-vitrine] .left__content .title h2 {
     width: 100%;
-    box-sizing: border-box;
-    padding: 0 15px;
-    margin: 0px 0 0;
+    margin: 0px;
     font-size: 26px;
     font-weight: 300;
     color: #818181;
 }
 
 [data-vitrine] .left__content .rating {
-    width: 100%;
-    display: inline-block;
+    width: 100%;    
 }
 
 [data-vitrine] .left__content .rating .rating-box {
@@ -920,7 +920,7 @@ body {
     font-size: 0;
     line-height: 0;
     background: url("https://www.saraiva.com.br/skin/frontend/saraiva/responsive/images/bkg_rating.png") repeat-x scroll 0 100% transparent;
-    margin: 0px 15px 16px;
+    margin: 0px 0 16px;
 }
 
 [data-vitrine] .left__content .rating .rating-box .rating {
@@ -934,7 +934,6 @@ body {
     width: 200px;
     height: 200px;
     float: left;
-    margin-left: 15px;
 }
 
 [data-vitrine] .left__content .image .content__image {
@@ -965,18 +964,24 @@ body {
 }
 
 [data-vitrine] .right__content {
-    width: 212px;
-    height: 352px;
-    float: left;
-    box-sizing: border-box;
+    width: 215px;
+    height: 365px;
     padding: 10px 13px;
     background-color: #efefef;
     position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+    align-content: flex-start;
+}
+
+[data-vitrine] .right__content > *{
+    margin: 0 auto;
 }
 
 [data-vitrine] .right__content .encomenda {
-    width: 100%;
-    height: auto;
     margin-top: 10px;
     font-weight: 600;
     font-size: 11px;
@@ -989,8 +994,6 @@ body {
 }
 
 [data-vitrine] .right__content .cartao {
-    width: 100%;
-    height: auto;
     font-weight: normal;
     font-size: 11px;
     color: #262626;
@@ -1011,8 +1014,6 @@ body {
 }
 
 [data-vitrine] .right__content .cartao--saraiva {
-    width: 100%;
-    height: auto;
     font-weight: normal;
     font-size: 11px;
     color: #262626;
@@ -1029,10 +1030,11 @@ body {
 }
 
 [data-vitrine] .right__content .button {
+    width: calc(100% - 20px);
     position: absolute;
-    bottom: 9px;
-    left: 13px;
-    width: 90%;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%)
 }
 
 [data-vitrine] .right__content .button button {
@@ -1082,23 +1084,17 @@ body {
 }
 
 [data-vitrine] .price--before {
-    width: 100%;
-    height: auto;
-    margin-top: 10px;
     font-weight: normal;
     font-size: 14px;
     color: #818181;
-    text-decoration: line-through;
 }
 
-[data-vitrine] .price--before span {
+[data-vitrine] .price--before .price {
     font-size: 14px;
     color: #818181;
 }
 
 [data-vitrine] .price--after {
-    width: 100%;
-    height: auto;
     margin-top: 2px;
     padding-bottom: 10px;
     border-bottom: 1px solid #cbcbcb;
@@ -1195,16 +1191,14 @@ body {
     }
 }
 
-/* 
-@media screen and (min-width: 480px) and (max-width: 767px) {
-    [data-vitrine] .product__content {
-        max-width: 75%;
-        margin: 0 auto;
-    }
-} */
-
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 1023px) {
     .vitrine__classicos [data-vitrine] .box__book {
         max-width: 60%;
+    }
+    [data-menu-vitrine="vertical"] {
+        flex-basis: 20%;
+    }
+    [data-menu-vitrine="vertical"]+[data-vitrine] {
+        flex-basis: 80%;
     }
 }

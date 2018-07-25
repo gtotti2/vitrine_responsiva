@@ -51,78 +51,40 @@ function vitrineLoader(lista, el) {
 
         function fixImageUrl(productInfo) {
             let valueSplitted = productInfo.image.split(".")
-            if (productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg") {
-                return productInfo.image
-            } else {
-                return productInfo.image + "300&a=-1"
-            }
+            let conditions = productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg"
+
+            return conditions ? productInfo.image : productInfo.image + "300&a=-1"
         }
 
         function doTruncarStr(str, size) {
-            if (str == undefined || str == 'undefined' || str == '' || size == undefined || size == 'undefined' || size == '') {
-                return str;
-            }
-            var shortText = str;
-            if (str.length >= size + 3) {
-                shortText = str.substring(0, size).concat('...');
-            }
-            return shortText;
-        }
-
-        function doTruncarStrClassicos(str, size) {
-            if (str == undefined || str == 'undefined' || str == '' || size == undefined || size == 'undefined' || size == '') {
-                return str;
-            }
-            var shortText = str;
-
-            if (str.length >= size + 3) {
-                $(window).width() < 425 ? size = 50 : size
-                shortText = str.substring(0, size).replace(/\./g, '. ').concat('...');
-            }
-            return shortText
+            conditions = str == undefined || str == 'undefined' || str == '' || size == undefined || size == 'undefined' || size == ''
+            conditions ? '' : $(window).width() < 425 ? size = 50 : size
+            return str.length > size + 3 ? str.substring(0, size).replace(/\./g, '. ').concat('...') : str
         }
 
         function validateSale(sale) {
-            if (sale > 0) {
-                return '<span class="tagSale lazyAtivado show"> -' + sale + '% </span>';
-            }
-            return '';
-        };
+            return sale > 0 ? '<span class="tagSale lazyAtivado show"> -' + sale + '% </span>' : ''
+        }
 
         function validAuthors(authors, data) {
             return (authors.length) ? authors[0].name : data.brand
         }
 
         function funcRating(rating) {
-            if (rating > 0.0) {
-                return 'rating-box';
-            } else {
-                return 'rating-box rating-box-desabled';
-            }
-
+            return rating > 0.0 ? 'rating-box' : 'rating-box rating-box-desabled'
         }
 
         function validPre(pre) {
-            if (pre !== 0) {
-                return 'pré-venda'
-            }
-            return '';
+            return pre !== 0 ? 'pré-venda' : '';
         }
 
 
         function validPrace(por) {
-            if (por.nominal === por.final) {
-                return '';
-            } else {
-                return 'R$ ' + por.nominal;
-            }
+            return por.nominal === por.final ? '' : 'R$ ' + por.nominal;
         }
 
         function validInstallmentePorce(porce) {
-            if (porce.discount_percent != 0) {
-                return '(-' + porce.discount_percent + '%)';
-            }
-            return '';
+            return porce.discount_percent != 0 ? '(-' + porce.discount_percent + '%)' : ''
         }
 
         function validInstallmente(parce1, parce2) {
@@ -137,7 +99,7 @@ function vitrineLoader(lista, el) {
         }
 
         function validSaraiva(sara) {
-            
+
             if (sara.discount_percent == 0 && sara.total_value_installments_with_fee == '0,00') {
                 return ' em ' + sara.qty_installments_with_discount + 'x sem juros no Cartão Saraivas';
             } else if (sara.discount_percent == 0) {
@@ -147,29 +109,193 @@ function vitrineLoader(lista, el) {
         }
 
         function validateOnSale(onSale, data) {
-            return ""
-            //return (onSale.length && onSale[0].category) ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.text}">` : ''
+            return (onSale.length && onSale[0].category) ? `<div class="content__category"><img src="${onSale[0].category.url}" title="${onSale[0].category.text}"></div>` : ''
         }
 
-        function limitTitleShowcase(title) {
-            if (title.length > 65) {
-                return title.substring(0, 62) + '...'
-            } else {
-                return title
-            }
+        function limitTitleShowcase(title, size) {
+
+            return title.length > size ? `${title.substring(0, size + 3)}...` : title
         }
 
         function sobEncomenda(status) {
             return status ? status : false
         }
 
-        function urgencyTag(id,data){
-            return ""
-            // if(id == 2796131){
-            //     console.log(data)
-            // }
-            // return
-            // return urgency ? '' : ''
+        function urgencyTag(data) {
+            var retorno;
+            const apiUrl = 'https://api.saraiva.com.br/';
+
+            fetch(`${apiUrl}produto/urgencycards/${data.sku}=${data.rule_urgency}`)
+                .then(response => {
+                    if (response.ok) {
+                        return Promise.resolve(response);
+                    }
+                    else {
+                        return Promise.reject(new Error('Failed to load'));
+                    }
+                })
+                .then(response => response.json()) // parse response as JSON    
+                .then(res => {
+                    const urgencyRule = res[data.sku]
+                    if (urgencyRule) {
+
+                        urgencyOptions = {
+                            remainingTime: urgencyRule.missing_time,
+                            remainingItems: urgencyRule.remaining_quantity,
+                            description: urgencyRule.description,
+                            showTimer: urgencyRule.show_timer,
+                            showItems: urgencyRule.show_counter,
+                            toggle: false
+                        }
+                        urgencyCounter = (options) => {
+                            // options details
+                            const remainingTime = options.remainingTime;
+                            const remainingItems = options.remainingItems;
+                            const description = options.description;
+                            const showTimer = options.showTimer;
+                            const showItems = options.showItems;
+                            const toggle = options.toggle;
+
+                            // svg defaults 
+                            const svgns = "http://www.w3.org/2000/svg";
+                            const xlinkns = "http://www.w3.org/1999/xlink";
+
+                            // create html
+                            const urgency = document.createElement('div');
+                            const urgencyLead = document.createElement('span');
+                            const urgencySVG = document.createElementNS(svgns, 'svg');
+                            const urgencyIcon = document.createElementNS(svgns, 'use');
+                            const urgencyRemainingTime = document.createElement('span');
+                            const urgencyRemainingItems = document.createElement('span');
+                            const urgencyDescription = document.createElement('p');
+
+                            // add classes
+                            urgency.classList.add('urgency');
+
+                            // create icon clock
+                            urgencySVG.classList.add('urgency__icon', 'size_xm');
+                            urgencyIcon.setAttributeNS(xlinkns, 'href', '#icon-clock');
+
+                            urgencySVG.appendChild(urgencyIcon);
+
+                            // add classes
+                            urgencyRemainingTime.classList.add('urgency__remaining-time');
+                            urgencyRemainingItems.classList.add('urgency__remaining-items');
+
+                            // toggle remain and timer
+                            if (toggle) {
+                                urgency.classList.add('urgency--small');
+
+                                if (showTimer && showItems) {
+                                    urgencyRemainingItems.classList.add('hide');
+
+                                    const toggleContent = setInterval(function () {
+                                        urgencyLead.classList.toggle('hide');
+                                        urgencySVG.classList.toggle('hide');
+                                        urgencyRemainingTime.classList.toggle('hide');
+                                        urgencyRemainingItems.classList.toggle('hide');
+                                    }, 3000);
+                                }
+                            }
+
+                            // create counter
+                            if (showTimer) {
+                                urgencyLead.textContent = 'Oferta';
+                                urgencyRemainingTime.textContent = '00:00:00';
+
+                                let changeTime = remainingTime;
+                                const createCounter = setInterval(function () {
+                                    let seconds = changeTime;
+
+                                    if (seconds > 59) {
+                                        seconds = seconds % 60;
+                                    }
+                                    if (seconds < 10) {
+                                        seconds = '0' + seconds;
+                                    }
+
+                                    let minutes = changeTime / 60;
+                                    minutes = minutes % 60;
+                                    minutes = Math.floor(minutes);
+
+                                    if (minutes < 10) {
+                                        minutes = '0' + minutes;
+                                    }
+
+                                    let hours = (changeTime / 60) / 60;
+                                    hours = Math.floor(hours);
+
+                                    if (hours < 10) {
+                                        hours = '0' + hours;
+                                    }
+
+                                    urgencyRemainingTime.textContent = hours + ':' + minutes + ':' + seconds;
+
+                                    changeTime--;
+                                    if (changeTime < 0) {
+                                        clearInterval(createCounter);
+
+                                        urgency.classList.add('urgency-timeout');
+
+                                        urgencyRemainingItems.textContent = 'Restam 0';
+
+                                        if (toggle) {
+                                            clearInterval(toggleContent);
+
+                                            urgencyLead.classList.remove('hide');
+                                            urgencySVG.classList.remove('hide');
+                                            urgencyRemainingTime.classList.remove('hide');
+                                            urgencyRemainingItems.classList.add('hide');
+                                        }
+                                    }
+                                }, 1000);
+                            }
+                            else {
+                                urgency.classList.add('urgency--center');
+
+                                urgencyLead.classList.add('hide');
+                                urgencySVG.classList.add('hide');
+                                urgencyRemainingTime.classList.add('hide');
+                            }
+
+                            if (showItems) {
+                                let remainText;
+                                if (remainingItems > 1) {
+                                    remainText = 'Restam '
+                                }
+                                else {
+                                    remainText = 'Resta '
+                                }
+
+                                urgencyRemainingItems.textContent = remainText + remainingItems;
+                            }
+                            else {
+                                urgency.classList.add('urgency--center');
+
+                                urgencyRemainingItems.classList.add('hide');
+                            }
+
+                            // join html
+                            urgency.appendChild(urgencyLead);
+                            urgency.appendChild(urgencySVG);
+                            urgency.appendChild(urgencyRemainingTime);
+                            urgency.appendChild(urgencyRemainingItems);
+
+                            const urgencyWrap = document.createElement('div');
+                            urgencyWrap.classList.add('urgency__wrap');
+
+                            if (description && !toggle) {
+                                urgencyDescription.classList.add('urgency__helper');
+                                urgencyDescription.textContent = description;
+
+                                urgencyWrap.appendChild(urgencyDescription);
+                            }
+                            urgencyWrap.appendChild(urgency);
+                            return urgencyWrap
+                        }
+                        retorno = urgencyCounter(urgencyOptions)
+                    }
+                })
         }
 
 
@@ -185,12 +311,12 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</div>' +
             '<div class="container__name" itemprop="name">' +
-            '<h2>' + limitTitleShowcase(showcaseProducts.name) + '</h2>' +
+            '<h2>' + limitTitleShowcase(showcaseProducts.name, 65) + '</h2>' +
             '</div>' +
             '</div>';
 
         htmlShowcase = '<div class="product__comum" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
-            //urgencyTag(showcaseProducts.id,showcaseProducts) + 
+            urgencyTag(showcaseProducts) +
             '<div class="product__content">' +
             '<div class="content__left">' +
             '<figure>' +
@@ -227,7 +353,7 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<div class="content__category">' + validateOnSale(showcaseProducts.on_sale, showcaseProducts) + '</div>' +
+            validateOnSale(showcaseProducts.on_sale, showcaseProducts) +
             '<div class="content__saraiva-card">' +
             '<svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cartao-saraiva"><svg id="icon-cartao-saraiva" viewBox="0 0 256 256" width="100%" height="100%"><title>Artboard 22</title><path d="M214.72 220.51a3.32 3.32 0 0 1 0-6.63 26.85 26.85 0 0 0 26.82-26.82 3.32 3.32 0 1 1 6.63 0 33.49 33.49 0 0 1-33.45 33.45zM41.73 220.51a33.49 33.49 0 0 1-33.45-33.44 3.32 3.32 0 1 1 6.63 0 26.84 26.84 0 0 0 26.82 26.82 3.32 3.32 0 0 1 0 6.63zM11.6 80.57a3.31 3.31 0 0 1-3.32-3.32 33.49 33.49 0 0 1 33.45-33.46 3.32 3.32 0 0 1 0 6.63 26.85 26.85 0 0 0-26.82 26.83 3.31 3.31 0 0 1-3.31 3.32zM244.85 80.57a3.31 3.31 0 0 1-3.32-3.32 26.86 26.86 0 0 0-26.82-26.83 3.32 3.32 0 0 1 0-6.63 33.49 33.49 0 0 1 33.46 33.46 3.31 3.31 0 0 1-3.32 3.32z"></path><path d="M244.85 190.38a3.31 3.31 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 220.51h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63zM11.6 190.38a3.32 3.32 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 50.42h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63z"></path><path d="M244.85 91.15H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM244.85 118.56H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM69.86 135.47H32.17a3.32 3.32 0 0 1 0-6.63h37.69a3.32 3.32 0 1 1 0 6.63z"></path><path fill="#1d1d1b" d="M215.82 136.85l-44.66 8.6 8.59 44 44.66-8.57-8.59-44.03z"></path><g clip-path="url(#a)"><path d="M126.34 155.61l6.34 33.45c15.63-11.2 30.12-13.19 37-8.05l-6.79-33.74c-4.52-4.42-20.67-4.93-36.57 8.34m-4.79-1.69c15.71-14.74 39.37-18.55 45.48-8l8.72 44.73c-8.23-10.21-24.2-11.26-45.91 6.23z" fill="#1d1d1b"></path></g></svg></use></svg>' +
             '<span class="saraiva-card__info">' + validSaraiva(showcaseProducts.price_block.saraiva_card) + '</span>' +
@@ -266,9 +392,9 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '<div class="box__book">' +
             '<div class="box__centralizado">' +
-            '<h3>' + doTruncarStrClassicos(showcaseProducts.name, 40) + '</h3>' +
+            '<h3>' + doTruncarStr(showcaseProducts.name, 40) + '</h3>' +
             '<small>' + (showcaseProducts.brand) + '</small>' +
-            '<p>' + doTruncarStrClassicos(showcaseProducts.description, 260) + '</p>' +
+            '<p>' + doTruncarStr(showcaseProducts.description, 260) + '</p>' +
             '<button class="cta">CONFIRA</button>' +
             '</div>' +
             '</div>' +
@@ -276,7 +402,7 @@ function vitrineLoader(lista, el) {
             '</li>';
 
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
-        
+
         $(el).append(htmlShowcase)
 
         tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.products.length - 1 ? $(el).append($('<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/' + $(el).data('vitrine').link + '">ver todos os produtos</a></div>')) : null
@@ -327,12 +453,8 @@ function htmlModal(product, id, sob, element) {
         }
     }
 
-    function limitText(params) {
-        var des = params;
-        if (des.length > 350) {
-            return des.substring(0, 350) + '...';
-        }
-        return des;
+    function limitText(params, size) {
+        return params.length > size ? params.substring(0, size) + '...' : params
     }
 
     function validPrace(por) {
@@ -358,10 +480,10 @@ function htmlModal(product, id, sob, element) {
         }
         return '';
     }
-    
+
     function validSaraiva(sara) {
-        
-        var num = parseInt(sara.qty_installments_with_discount,10);
+
+        var num = parseInt(sara.qty_installments_with_discount, 10);
         if (num === sara.qty_installments_without_fee) {
             return 'Cartão Saraiva: <span class="value-different">' + sara.qty_installments_with_discount + 'x de R$ ' + sara.value_with_discount + '</span>';
         } else {
@@ -397,7 +519,7 @@ function htmlModal(product, id, sob, element) {
         '</div>' +
         '</div>' +
         '<div class="description">' +
-        limitText(product.description) +
+        limitText(product.description, 350) +
         '</div>' +
         '</div>' +
         '<div class="right__content">' +
@@ -569,9 +691,9 @@ function slickLoadAjax(thisSlider, id_vitrine) {
     slickOptions.mobileFirst == false ? slickOptions.mobileFirst : slickOptions.mobileFirst = true
     !slickOptions ? slickOptions = slickOptionsDefault : !responsivo ? slickOptions.responsive = responsiveOptionsDefault : responsivo == "nulo" ? delete slickOptions.responsive : slickOptions.responsive = responsivo
 
-    // data.tipo == "estante" ? slickOptions = slickOptionsEstante : slickOptions
+
     // Carregar 5 itens apenas no mobile
-    mobileScreen ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade
+    mobileScreen && data.tipo != "classicos" ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade
 
 
     function callAjax() {
@@ -580,7 +702,6 @@ function slickLoadAjax(thisSlider, id_vitrine) {
             type: 'GET'
         }).done(function (data) {
             function formattedEstanteView(dataSlickOptions, data) {
-                console.log(dataSlickOptions)
                 // var total
                 // $(window).width() <= 1024 ?  total = 5 : total = data.total_count + 1 
                 // return(dataSlickOptions.slidesToScroll = total , dataSlickOptions.slidesToShow = total)

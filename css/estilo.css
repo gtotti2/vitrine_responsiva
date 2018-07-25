@@ -866,6 +866,7 @@ body {
     left: calc(50% - 380px);
     background-color: #fff;
     border: 1px solid #787878;
+    padding: 0 !important;
 }
 
 [data-vitrine] .modal__product {
@@ -954,7 +955,7 @@ body {
 }
 
 [data-vitrine] .left__content .description {
-    width: 250px;
+    width: 238px;
     height: auto;
     float: left;
     margin: 12px 0 0 17px;

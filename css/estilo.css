@@ -46,7 +46,7 @@ body {
 [data-vitrine] {
     max-width: 100%;
     margin: 0 auto;
-    min-height: 360px;
+    min-height: 315px;
     text-align: center;
     font-family: 'Work Sans', sans-serif;
     overflow: hidden;
@@ -59,6 +59,7 @@ body {
 }
 
 [data-vitrine] .slick-arrow {
+    content: "";
     width: 48px;
     height: 48px;
     position: absolute;
@@ -67,11 +68,9 @@ body {
     text-indent: -99999px;
     border-radius: 50%;
     outline: 1px solid transparent;
+    background-color: #ddd;
 }
 
-[data-vitrine] .slick-arrow:hover {
-    background: #000;
-}
 
 [data-vitrine] .slick-arrow:before {
     content: "";
@@ -81,75 +80,41 @@ body {
     top: 0;
     left: 0px;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#14171c' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
-    content: "";
-    width: 48px;
-    height: 48px;
     background-position: center;
     background-size: 70%;
     background-repeat: no-repeat;
-    border: 0;
     transform: rotate(180deg);
 }
 
 [data-vitrine] .slick-arrow:hover:before {
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#ffffff' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
-    background-size: 70%;
     background-position: center;
-    transform: rotate(180deg);
-    background-repeat: no-repeat;
-}
-
-[data-vitrine] .slick-arrow.slick-prev {
-    content: "";
-    width: 48px;
-    height: 48px;
-    left: 0;
-    position: absolute;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#14171c' stroke='none'><path d='M163.86 211.7a3 3 0 0 1-2.23-1L92 133.39a11.26 11.26 0 0 1 0-15.1L161.63 41a3 3 0 0 1 4.46 4L96.5 122.31a5.27 5.27 0 0 0 0 7.07l69.59 77.32a3 3 0 0 1-2.23 5z'></path></svg>");
     background-size: 70%;
     background-repeat: no-repeat;
-    background-position: center;
-    background-color: #ddd;
-    border: 0;
-}
-
-[data-vitrine] .slick-arrow.slick-prev:hover {
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#ffffff' stroke='none'><path d='M163.86 211.7a3 3 0 0 1-2.23-1L92 133.39a11.26 11.26 0 0 1 0-15.1L161.63 41a3 3 0 0 1 4.46 4L96.5 122.31a5.27 5.27 0 0 0 0 7.07l69.59 77.32a3 3 0 0 1-2.23 5z'></path></svg>");
-    background-size: 70%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #000;
-}
-
-[data-vitrine] .slick-arrow.slick-next {
-    content: "";
-    width: 48px;
-    height: 48px;
-    right: 0;
-    position: absolute;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#14171c' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
-    background-size: 70%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #ddd;
-    border: 0;
 }
 
 [data-vitrine] .slick-arrow.slick-disabled {
     opacity: .3;
 }
 
-[data-vitrine] .slick-arrow.slick-next:hover {
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 256 256' fill='#ffffff' stroke='none'><path d='M93.91 209.29a3 3 0 0 1-2.23-5L161.27 127a5.27 5.27 0 0 0 0-7.07L91.68 42.57a3 3 0 0 1 4.46-4l69.59 77.32a11.26 11.26 0 0 1 0 15.1l-69.59 77.3a3 3 0 0 1-2.23 1z'></path></svg>");
-    background-size: 70%;
-    background-repeat: no-repeat;
-    background-position: center;
+[data-vitrine] .slick-arrow:not(.slick-disabled):hover {
     background-color: #000;
 }
 
+
+[data-vitrine] .slick-arrow.slick-prev {
+    left: 0;
+}
+
+
+[data-vitrine] .slick-arrow.slick-next {
+    right: 0;
+}
 [data-vitrine] .slick-arrow.slick-next:before {
     transform: rotate(0deg);
 }
+
+
 
 [data-vitrine] .product__comum {
     position: relative;
@@ -164,14 +129,83 @@ body {
     justify-content: space-between;
 }
 
+
 [data-vitrine] .product__content {
     box-sizing: border-box;
     position: relative;
     padding: 24px 0px 0px;
-    max-height: 184px;
+    height: 194px;
     text-align: left;
     display: flex;
     align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+[data-vitrine] .urgency__wrap {
+    width: 100%;
+    display: block;
+}
+
+[data-vitrine] .urgency {
+    box-sizing: border-box;
+    background: #ff6200;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4em;
+    text-transform: uppercase;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 3px 10%;
+    justify-content: space-evenly;
+}
+
+[data-vitrine] .urgency span{
+    color: #fff;
+}
+
+[data-vitrine] .urgency .icon-clock {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    
+}
+
+[data-vitrine] .urgency .icon-clock:before {
+    content: '';
+    vertical-align: middle;
+    display: inline-block;
+    background-image: url(https://www.saraiva.com.br/app-build/img/global/sprite.svg);
+    background-repeat: no-repeat;
+    background-size: 1em 101em;
+    font-size: 256px;
+}
+
+[data-vitrine] .urgency .icon-clock:after {
+    content: ' ';
+    position: absolute;
+    top: -1px;
+    left: 1px;
+    right: 0;
+    margin: auto;
+    width: 1px;
+    height: 8px;
+    background: white;
+    transform: rotate(-150deg);
+    transform-origin: bottom;
+}
+
+[data-vitrine] .urgency .urgency__remaining-time,[data-vitrine] .urgency .urgency__remaining-items {
+    display: none;
+    flex-basis: 80px;
+}
+[data-vitrine] .urgency .urgency__remaining-time.active ,[data-vitrine] .urgency .urgency__remaining-items.active {
+    display: block;
+    
 }
 
 [data-vitrine] .product__content .content__left {
@@ -211,8 +245,9 @@ body {
 }
 
 [data-vitrine] .product__content .content__left figure img {
-    margin: 0;
+    margin: 0 auto;
     max-width: 100%;
+    max-height: 160px;
 }
 
 [data-vitrine] .product__content .content__left figure .tagSale {
@@ -274,15 +309,17 @@ body {
 [data-vitrine] .product__content .content__right .content__text .subtitle {
     font-size: 11px;
     font-weight: 400;
+    line-height: 1em;
 }
 
 [data-vitrine] .product__content .content__right .content__text .ratings {
     display: table;
+    margin: 5px 0;
 }
 
 [data-vitrine] .product__content .content__right .content__text .ratings a {
     display: inline-block;
-    margin: 5px 0;
+    
 }
 
 [data-vitrine] .product__content .content__right .content__text .ratings .rating-box {
@@ -363,10 +400,11 @@ body {
     margin-bottom: 10px;
 }
 
-[data-vitrine] .content__saraiva-card svg {
-    width: 20px;
-    height: 20px;
+[data-vitrine] .content__saraiva-card i {
+    background: url(./cartao_saraiva.png) no-repeat scroll top center;
     display: inline-block;
+    width: 20px;
+    height: 15px;
     vertical-align: middle;
     margin-right: 5px;
 }
@@ -442,6 +480,7 @@ body {
 
 [data-vitrine] .slick-dots {
     padding: 0;
+    position: relative;
     bottom: -12px;
     clear: both;
 }
@@ -910,7 +949,7 @@ body {
 }
 
 [data-vitrine] .left__content .rating {
-    width: 100%;    
+    width: 100%;
 }
 
 [data-vitrine] .left__content .rating .rating-box {
@@ -978,7 +1017,7 @@ body {
     align-content: flex-start;
 }
 
-[data-vitrine] .right__content > *{
+[data-vitrine] .right__content>* {
     margin: 0 auto;
 }
 

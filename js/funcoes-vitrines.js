@@ -52,13 +52,12 @@ function vitrineLoader(lista, el) {
         function fixImageUrl(productInfo) {
             let valueSplitted = productInfo.image.split(".")
             let conditions = productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg"
-
             return conditions ? productInfo.image : productInfo.image + "300&a=-1"
         }
 
         function doTruncarStr(str, size) {
             conditions = str == undefined || str == 'undefined' || str == '' || size == undefined || size == 'undefined' || size == ''
-            conditions ? '' : $(window).width() < 425 ? size = 50 : size
+            !conditions ? $(window).width() < 425 ? size = 50 : size : ''
             return str.length > size + 3 ? str.substring(0, size).replace(/\./g, '. ').concat('...') : str
         }
 
@@ -67,27 +66,36 @@ function vitrineLoader(lista, el) {
         }
 
         function validAuthors(authors, data) {
-            return (authors.length) ? authors[0].name : data.brand
+            return (authors.length) ? authors.map((author, index) => `${author.name}<br />`).join('') : ""
         }
 
         function funcRating(rating) {
-            return rating > 0.0 ? 'rating-box' : 'rating-box rating-box-desabled'
+
+            return rating > 0.0 ? `
+            <div class="ratings">
+                <a href="${showcaseProducts.url}" title="${showcaseProducts.name}" data-track="click">
+                    <div class="rating-box">
+                        <div class="rating" style="width: ${showcaseProducts.reviews_stars_width}%;"></div>
+                    </div>
+                </a>
+            </div>` : `
+            <div class="ratings"></div>
+            `
         }
 
         function validPre(pre) {
             return pre !== 0 ? 'pré-venda' : '';
         }
 
-
         function validPrace(por) {
             return por.nominal === por.final ? '' : 'R$ ' + por.nominal;
         }
 
-        function validInstallmentePorce(porce) {
+        function validacaoParcelamentoPorce(porce) {
             return porce.discount_percent != 0 ? '(-' + porce.discount_percent + '%)' : ''
         }
 
-        function validInstallmente(parce1, parce2) {
+        function validacaoParcelamento(parce1, parce2) {
             if (parce1.value_with_discount === parce2.nominal) {
                 return '';
             } else if (parce1.value_with_discount === parce2.value_installments_without_fee) {
@@ -99,7 +107,6 @@ function vitrineLoader(lista, el) {
         }
 
         function validSaraiva(sara) {
-
             if (sara.discount_percent == 0 && sara.total_value_installments_with_fee == '0,00') {
                 return ' em ' + sara.qty_installments_with_discount + 'x sem juros no Cartão Saraivas';
             } else if (sara.discount_percent == 0) {
@@ -108,12 +115,11 @@ function vitrineLoader(lista, el) {
             return ' R$ ' + sara.value_with_discount + '   <span class="vProduct-percentDiscount">(' + sara.discount_percent + '% de desconto)</span> no Cartão Saraiva';
         }
 
-        function validateOnSale(onSale, data) {
-            return (onSale.length && onSale[0].category) ? `<div class="content__category"><img src="${onSale[0].category.url}" title="${onSale[0].category.text}"></div>` : ''
+        function validateOnSale(onSale) {
+            return (onSale.length && onSale[0].category) ? `<div class="content__category"><img src="${onSale[0].category.url}" title="${onSale[0].category.text}"></div>` : `<div class="content__category"></div>`
         }
 
         function limitTitleShowcase(title, size) {
-
             return title.length > size ? `${title.substring(0, size + 3)}...` : title
         }
 
@@ -121,24 +127,15 @@ function vitrineLoader(lista, el) {
             return status ? status : false
         }
 
-        function urgencyTag(data) {
-            var retorno;
+        (function (data) {
             const apiUrl = 'https://api.saraiva.com.br/';
-
-            fetch(`${apiUrl}produto/urgencycards/${data.sku}=${data.rule_urgency}`)
-                .then(response => {
-                    if (response.ok) {
-                        return Promise.resolve(response);
-                    }
-                    else {
-                        return Promise.reject(new Error('Failed to load'));
-                    }
-                })
-                .then(response => response.json()) // parse response as JSON    
-                .then(res => {
-                    const urgencyRule = res[data.sku]
+            $.ajax({
+                url: `${apiUrl}produto/urgencycards/${data.sku}=${data.rule_urgency}`,
+                dataType: 'json',
+                async: true,
+                success: function (response) {
+                    const urgencyRule = response[data.sku]
                     if (urgencyRule) {
-
                         urgencyOptions = {
                             remainingTime: urgencyRule.missing_time,
                             remainingItems: urgencyRule.remaining_quantity,
@@ -147,7 +144,7 @@ function vitrineLoader(lista, el) {
                             showItems: urgencyRule.show_counter,
                             toggle: false
                         }
-                        urgencyCounter = (options) => {
+                        function urgencyCounter(options) {
                             // options details
                             const remainingTime = options.remainingTime;
                             const remainingItems = options.remainingItems;
@@ -163,8 +160,7 @@ function vitrineLoader(lista, el) {
                             // create html
                             const urgency = document.createElement('div');
                             const urgencyLead = document.createElement('span');
-                            const urgencySVG = document.createElementNS(svgns, 'svg');
-                            const urgencyIcon = document.createElementNS(svgns, 'use');
+                            const urgencyIcon = document.createElement('i');
                             const urgencyRemainingTime = document.createElement('span');
                             const urgencyRemainingItems = document.createElement('span');
                             const urgencyDescription = document.createElement('p');
@@ -173,13 +169,12 @@ function vitrineLoader(lista, el) {
                             urgency.classList.add('urgency');
 
                             // create icon clock
-                            urgencySVG.classList.add('urgency__icon', 'size_xm');
+                            urgencyIcon.classList.add('icon', 'icon-clock');
                             urgencyIcon.setAttributeNS(xlinkns, 'href', '#icon-clock');
 
-                            urgencySVG.appendChild(urgencyIcon);
 
                             // add classes
-                            urgencyRemainingTime.classList.add('urgency__remaining-time');
+                            urgencyRemainingTime.classList.add('urgency__remaining-time', 'active');
                             urgencyRemainingItems.classList.add('urgency__remaining-items');
 
                             // toggle remain and timer
@@ -191,7 +186,7 @@ function vitrineLoader(lista, el) {
 
                                     const toggleContent = setInterval(function () {
                                         urgencyLead.classList.toggle('hide');
-                                        urgencySVG.classList.toggle('hide');
+                                        urgencyIcon.classList.toggle('hide');
                                         urgencyRemainingTime.classList.toggle('hide');
                                         urgencyRemainingItems.classList.toggle('hide');
                                     }, 3000);
@@ -243,7 +238,7 @@ function vitrineLoader(lista, el) {
                                             clearInterval(toggleContent);
 
                                             urgencyLead.classList.remove('hide');
-                                            urgencySVG.classList.remove('hide');
+                                            urgencyIcon.classList.remove('hide');
                                             urgencyRemainingTime.classList.remove('hide');
                                             urgencyRemainingItems.classList.add('hide');
                                         }
@@ -254,7 +249,7 @@ function vitrineLoader(lista, el) {
                                 urgency.classList.add('urgency--center');
 
                                 urgencyLead.classList.add('hide');
-                                urgencySVG.classList.add('hide');
+                                urgencyIcon.classList.add('hide');
                                 urgencyRemainingTime.classList.add('hide');
                             }
 
@@ -277,7 +272,7 @@ function vitrineLoader(lista, el) {
 
                             // join html
                             urgency.appendChild(urgencyLead);
-                            urgency.appendChild(urgencySVG);
+                            urgency.appendChild(urgencyIcon);
                             urgency.appendChild(urgencyRemainingTime);
                             urgency.appendChild(urgencyRemainingItems);
 
@@ -290,13 +285,35 @@ function vitrineLoader(lista, el) {
 
                                 urgencyWrap.appendChild(urgencyDescription);
                             }
-                            urgencyWrap.appendChild(urgency);
+                            urgencyWrap.appendChild(urgency)
                             return urgencyWrap
                         }
-                        retorno = urgencyCounter(urgencyOptions)
+                        var retorno = urgencyCounter(urgencyOptions)
+                        $(`.product__comum[data-sku="${data.sku}"]`).prepend(retorno)
+
+                        setInterval(toggleClassTime, 3000, 200);
                     }
+                }
+            });
+        })(this);
+
+
+        function toggleClassTime(time) {
+
+            if ($('.urgency__remaining-time').hasClass('active')) {
+                $('.urgency__remaining-time').slideUp(time, function () {
+                    $(this).removeClass('active')
+                    $('.urgency__remaining-items').slideDown(time).addClass('active')
                 })
+            } else {
+                $('.urgency__remaining-items').slideUp(time, function () {
+                    $(this).removeClass('active')
+                    $('.urgency__remaining-time').slideDown(time).addClass('active')
+                })
+            }
+
         }
+
 
 
         htmlShowCaseAspirational = '<div class="product__aspirational" data-pid="' + showcaseProducts.id + '" id="coleAspi__showcase-' + showcaseProducts.id + '" data-sku="' + showcaseProducts.sku + '" data-sob="' + sobEncomenda(showcaseProducts.back_order) + '" itemscope itemtype="http://schema.org/Product">' +
@@ -315,8 +332,7 @@ function vitrineLoader(lista, el) {
             '</div>' +
             '</div>';
 
-        htmlShowcase = '<div class="product__comum" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
-            urgencyTag(showcaseProducts) +
+        htmlShowcase = '<div class="product__comum" data-sku="' + showcaseProducts.sku + '" + data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
             '<div class="product__content">' +
             '<div class="content__left">' +
             '<figure>' +
@@ -334,28 +350,21 @@ function vitrineLoader(lista, el) {
             '<span class="title">' + doTruncarStr(showcaseProducts.name, 40) + '</span>' +
             '<span class="subtitle">' + validAuthors(showcaseProducts.authors, showcaseProducts) + '</span>' +
             '</a>' +
-            '<div class="ratings">' +
-            '<a href="' + showcaseProducts.url + '" title="' + showcaseProducts.name + '" data-track="click">' +
-            '<div class="' + funcRating(showcaseProducts.reviews_stars_width) + '">' +
-            '<div class="rating" style="width:' + showcaseProducts.reviews_stars_width + '%;"></div>' +
-            '</div>' +
-            '<span class="amount"></span>' +
-            '</a>' +
-            '</div>' +
+            funcRating(showcaseProducts.reviews_stars_width) +
             '<div class="bottom-block-price" data-pre="' + validPre(showcaseProducts.presale) + '">' +
             '<span class="preorder">' + validPre(showcaseProducts.presale) + '</span>' +
             '<span class="list_price_group">' +
             '<span class="price">' + validPrace(showcaseProducts.price_block.price) + '</span>' +
             '<span class="special_price">R$ ' + showcaseProducts.price_block.credit_card.value_with_discount + '</span>' +
-            '<span class="discount_value">' + validInstallmentePorce(showcaseProducts.price_block.credit_card) + '</span>' +
-            '<span class="discount_cc">' + validInstallmente(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) + '</span>' +
+            '<span class="discount_value">' + validacaoParcelamentoPorce(showcaseProducts.price_block.credit_card) + '</span>' +
+            '<span class="discount_cc">' + validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) + '</span>' +
             '</div>' +
             '</div>' +
             '</div>' +
             '</div>' +
-            validateOnSale(showcaseProducts.on_sale, showcaseProducts) +
+            validateOnSale(showcaseProducts.on_sale) +
             '<div class="content__saraiva-card">' +
-            '<svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cartao-saraiva"><svg id="icon-cartao-saraiva" viewBox="0 0 256 256" width="100%" height="100%"><title>Artboard 22</title><path d="M214.72 220.51a3.32 3.32 0 0 1 0-6.63 26.85 26.85 0 0 0 26.82-26.82 3.32 3.32 0 1 1 6.63 0 33.49 33.49 0 0 1-33.45 33.45zM41.73 220.51a33.49 33.49 0 0 1-33.45-33.44 3.32 3.32 0 1 1 6.63 0 26.84 26.84 0 0 0 26.82 26.82 3.32 3.32 0 0 1 0 6.63zM11.6 80.57a3.31 3.31 0 0 1-3.32-3.32 33.49 33.49 0 0 1 33.45-33.46 3.32 3.32 0 0 1 0 6.63 26.85 26.85 0 0 0-26.82 26.83 3.31 3.31 0 0 1-3.31 3.32zM244.85 80.57a3.31 3.31 0 0 1-3.32-3.32 26.86 26.86 0 0 0-26.82-26.83 3.32 3.32 0 0 1 0-6.63 33.49 33.49 0 0 1 33.46 33.46 3.31 3.31 0 0 1-3.32 3.32z"></path><path d="M244.85 190.38a3.31 3.31 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 220.51h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63zM11.6 190.38a3.32 3.32 0 0 1-3.32-3.32V77.25a3.32 3.32 0 1 1 6.63 0v109.82a3.31 3.31 0 0 1-3.31 3.31zM214.72 50.42h-173a3.32 3.32 0 0 1 0-6.63h173a3.32 3.32 0 0 1 0 6.63z"></path><path d="M244.85 91.15H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM244.85 118.56H11.6a3.32 3.32 0 0 1 0-6.63h233.25a3.32 3.32 0 0 1 0 6.63zM69.86 135.47H32.17a3.32 3.32 0 0 1 0-6.63h37.69a3.32 3.32 0 1 1 0 6.63z"></path><path fill="#1d1d1b" d="M215.82 136.85l-44.66 8.6 8.59 44 44.66-8.57-8.59-44.03z"></path><g clip-path="url(#a)"><path d="M126.34 155.61l6.34 33.45c15.63-11.2 30.12-13.19 37-8.05l-6.79-33.74c-4.52-4.42-20.67-4.93-36.57 8.34m-4.79-1.69c15.71-14.74 39.37-18.55 45.48-8l8.72 44.73c-8.23-10.21-24.2-11.26-45.91 6.23z" fill="#1d1d1b"></path></g></svg></use></svg>' +
+            '<i></i>' +
             '<span class="saraiva-card__info">' + validSaraiva(showcaseProducts.price_block.saraiva_card) + '</span>' +
             '</div>' +
             '<div class="content__action">' +
@@ -376,7 +385,7 @@ function vitrineLoader(lista, el) {
             '<div class="preorder">' + validPre(showcaseProducts.presale) + '</div>' +
             '<div class="price">' + validPrace(showcaseProducts.price_block.price) + '</div>' +
             '<div class="special-price">R$ ' + showcaseProducts.price_block.credit_card.value_with_discount + '</div>' +
-            '<div class="discount-cc">' + validInstallmente(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) +
+            '<div class="discount-cc">' + validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) +
             '</div>' +
             '</div>' +
             '</figcaption>' +
@@ -437,13 +446,7 @@ function htmlModal(product, id, sob, element) {
         classBtnDefault = 'add-cart check-services btn-secondary btn-full icon icon-carrinho icon-btn';
     }
 
-    function limitTitleModal(limitTitle) {
-        var titleModal = limitTitle;
-        if (titleModal.length > 99) {
-            return titleModal.substring(0, 100) + '...';
-        }
-        return titleModal;
-    }
+
 
     function funcRating(rating) {
         if (rating > 0.0) {
@@ -453,11 +456,11 @@ function htmlModal(product, id, sob, element) {
         }
     }
 
-    function limitText(params, size) {
+    function limitarQtdCaracteres(params, size) {
         return params.length > size ? params.substring(0, size) + '...' : params
     }
 
-    function validPrace(por) {
+    function validacaoPreco(por) {
         if (por.nominal === por.final) {
             return '';
         } else {
@@ -465,21 +468,16 @@ function htmlModal(product, id, sob, element) {
         }
     }
 
-    function validInstallmente(parce1, parce2) {
-        if (parce1.value_with_discount === parce2.nominal) {
-            return '';
-        }
-        return 'Em ' + parce1.qty_installments_with_discount + 'x no cartão';
-    }
-
-    function validInstallmente2(parce1, parce2) {
-        if (parce1.value_with_discount === parce2.nominal) {
+    function validacaoParcelamento(parce1, parce2) {
+        if (parce1.value_with_discount === parce2.nominal || parce1.has_discount === 0) {
             return '';
         } else if (parce1.has_discount !== 0) {
             return '<div class="discount_cc"><div class="cartao-total"><span>Parcelado:</span> R$ ' + parce2.total_value_installments_with_fee + ' </div> em atÃ© ' + parce2.qty_installments_without_fee + 'x de <span class="value-different">R$ ' + parce2.value_installments_with_fee + '</span> sem juros</div>';
         }
-        return '';
+        return 'Em ' + parce1.qty_installments_with_discount + 'x no cartão';
     }
+
+
 
     function validSaraiva(sara) {
 
@@ -506,7 +504,7 @@ function htmlModal(product, id, sob, element) {
         '</div>' +
         '<div class="left__content">' +
         '<div class="title">' +
-        '<h2>' + limitTitleModal(product.name) + '</h2>' +
+        '<h2>' + limitarQtdCaracteres(product.name, 99) + '</h2>' +
         '</div>' +
         '<div class="rating">' +
         '<div class="' + funcRating(product.reviews_stars_width) + '">' +
@@ -519,7 +517,7 @@ function htmlModal(product, id, sob, element) {
         '</div>' +
         '</div>' +
         '<div class="description">' +
-        limitText(product.description, 350) +
+        limitarQtdCaracteres(product.description, 350) +
         '</div>' +
         '</div>' +
         '<div class="right__content">' +
@@ -527,16 +525,16 @@ function htmlModal(product, id, sob, element) {
         'Produto sob encomenda' +
         '</div>' +
         '<div class="price--before">' +
-        '<span class="price">' + validPrace(product.price_block.price) + '</span>' +
+        '<span class="price">' + validacaoPreco(product.price_block.price) + '</span>' +
         '</div>' +
         '<div class="price--after">' +
         '<span>Por:</span> R$ ' + product.price_block.credit_card.value_with_discount + '' +
         '<div class="price__parcelas">' +
-        '<span class="desconto">' + validInstallmente(product.price_block.credit_card, product.price_block.price) + '</span>' +
+        '<span class="desconto">' + validacaoParcelamento(product.price_block.credit_card, product.price_block.price) + '</span>' +
         '</div>' +
         '</div>' +
         '<div class="cartao">' +
-        validInstallmente2(product.price_block.credit_card, product.price_block.price) +
+        validacaoParcelamento(product.price_block.credit_card, product.price_block.price) +
         '</div>' +
         '<div class="cartao--saraiva">' +
         validSaraiva(product.price_block.saraiva_card) +
@@ -772,9 +770,8 @@ $(document).ready(function () {
             $('[data-vitrine].estante figcaption').each(function () {
                 var $this = $(this)
                 str = $this.find('.discount-cc').text()
-                var textSub = str.substring(0, 26);
-
-                //$this.find('.price-group').outerHeight() >= 71 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
+                var textSub = str.substring(0, 26)
+                $this.outerHeight() > 93 ? $this.find('.discount-cc').text(textSub + '...') : $this.find('.discount-cc').text(str)
             })
         } else {
             setTimeout(checkForChanges, 300);

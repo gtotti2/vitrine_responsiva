@@ -114,8 +114,6 @@ body {
     transform: rotate(0deg);
 }
 
-
-
 [data-vitrine] .product__comum {
     position: relative;
     text-align: center;
@@ -128,7 +126,6 @@ body {
     flex-flow: column nowrap;
     justify-content: space-between;
 }
-
 
 [data-vitrine] .product__content {
     box-sizing: border-box;
@@ -699,13 +696,16 @@ body {
 .vitrine__classicos [data-vitrine] {
     min-height: initial;
 }
-
+.vitrine__classicos [data-vitrine] .slick-arrow{
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
 .vitrine__classicos [data-vitrine] li.destaques__box {
     margin: 0 10px;
     max-height: 325px;
     outline: transparent;
 }
-
 .vitrine__classicos [data-vitrine] li.destaques__box a {
     background: #fff;
     display: inline-block;
@@ -714,20 +714,20 @@ body {
     outline: transparent;
     text-align: left;
 }
-
 .vitrine__classicos [data-vitrine] .box__img-prod {
-    display: inline-block;
-    vertical-align: middle;
     width: 38%;
     max-width: 210px;
     height: auto;
+    display: inline-block;
+    vertical-align: middle;
 }
-
 .vitrine__classicos [data-vitrine] .box__img-prod img {
-    width: 100%;
-    height: auto;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    height: 270px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: auto;
 }
 
 .vitrine__classicos [data-vitrine] .box__book {
@@ -766,6 +766,7 @@ body {
     border-radius: 5px;
     font-size: 14px;
     font-weight: 500;
+    cursor: pointer;
 }
 
 [data-vitrine] .product__aspirational {
@@ -1157,9 +1158,63 @@ body {
     font-size: 12px;
     color: #262626;
 }
+/* ebooks */
+[data-vitrine] .product__ebooks {
+    text-align: center;
+    font-size: 18px;
+    width: 60%;
+    max-width: 180px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    position: relative;
+    max-height: 270px;
+}
+[data-vitrine] .product__ebooks img {
+    bottom: 0;
+    display: block;
+    left: 0;
+    margin: auto;
+    max-height: 250px;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+[data-vitrine] .product__ebooks .seal {
+    margin: 0 auto;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+[data-vitrine] .product__ebooks .seal.digital:before {
+    content: 'e-book';
+    padding: 6px 14px;
+    margin: 0px auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 70px;
+    border-radius: 5px;
+    background-color: #1d6dff;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+}
 
 /* RESPONSIVE */
-
 @media screen and (max-width: 768px) {
     h2:after, h2:before {
         display: none;
@@ -1220,14 +1275,59 @@ body {
 }
 
 @media screen and (max-width: 480px) {
+    .vitrine__classicos [data-vitrine] .box__img-prod{
+        width: auto;
+    }
+    .vitrine__classicos [data-vitrine] .box__img-prod img {
+        height: 200px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        width: auto;
+        max-width: 150px;
+    }
+    .vitrine__classicos [data-vitrine] .box__book {
+        display: inline-block;
+        width: auto;
+        box-sizing: border-box;
+        vertical-align: middle;
+        max-width: 50%;
+    }
     .vitrine__classicos [data-vitrine] a .box__book h3 {
         font-size: 15px;
     }
+    .vitrine__classicos [data-vitrine] a .box__book p{
+        display: none;
+    }
     .vitrine__classicos [data-vitrine] a .box__book small {
         font-size: 11px;
+        margin: 5px 0 20px 0;
+        display: block;
     }
-    .vitrine__classicos [data-vitrine] a .box__book p {
-        font-size: 12px;
+}
+
+@media (max-width: 325px){
+    .vitrine__classicos [data-vitrine] .box__img-prod img {
+        height: 160px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        width: auto;
+        max-width: 130px;
+    }
+    .vitrine__classicos [data-vitrine] .box__img-prod {
+        width: auto;
+    }
+    .vitrine__classicos [data-vitrine] .box__book {
+        display: inline-block;
+        width: auto;
+        box-sizing: border-box;
+        vertical-align: middle;
+        max-width: 50%;
+    }
+    .vitrine__classicos [data-vitrine] a .box__book h3 {
+        font-size: 13px;
+    }
+    .vitrine__classicos [data-vitrine] a .box__book button.cta{
+        width: 110px;
     }
 }
 

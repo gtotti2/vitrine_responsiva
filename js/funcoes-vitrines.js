@@ -410,7 +410,17 @@ function vitrineLoader(lista, el) {
             '</a>' +
             '</li>';
 
-        tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
+            htmlShowcaseEbooks =
+            '<div class="product__ebooks" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +
+            '<a href="' + showcaseProducts.url + '" data-track="click">' +
+            '<figure>' +
+            '<div class="seal ' + showDigitalSeal(showcaseProducts.digital) + '"></div>' +
+            '<img alt="' + showcaseProducts.name + '" src="' + fixImageUrl(showcaseProducts) + '">' +
+            '</figure>' +
+            '</a>' +
+            '</div>';
+
+        tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "ebooks" ? htmlShowcase = htmlShowcaseEbooks : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
         $(el).append(htmlShowcase)
 

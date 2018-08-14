@@ -1178,7 +1178,7 @@ body {
     -webkit-align-items: center;
     align-items: center;
     position: relative;
-    max-height: 270px;
+    height: 270px;
 }
 [data-vitrine] .product__ebooks img {
     bottom: 0;

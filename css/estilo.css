@@ -1214,7 +1214,21 @@ body {
     font-weight: bold;
     z-index: 1;
 }
-
+/* MURAL */
+/* ebooks */
+[data-vitrine] .product__mural {
+    text-align: center;
+    position: relative;
+}
+[data-vitrine] .product__mural img {
+    bottom: 0;
+    display: block;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 /* RESPONSIVE */
 @media screen and (max-width: 768px) {
     h2:after, h2:before {

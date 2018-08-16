@@ -577,13 +577,13 @@ body {
     padding-top: 10px;
 }
 
-[data-vitrine] .product__estante img, [data-vitrine] .product__estante figcaption {
+[data-vitrine] .product__estante img, [data-vitrine] .product__estante .figcaption {
     display: table-caption;
     caption-side: bottom;
     overflow-y: -webkit-paged-y;
 }
 
-[data-vitrine] figcaption {
+[data-vitrine] .figcaption {
     background: #fff;
     padding: 10px;
     box-sizing: border-box;

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .slideshow__infinito {
+            overflow: hidden;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-flow: row nowrap;
+            animation: marquee 10s linear infinite;
+        }
+
+        .wrapper:nth-child(2) {
+            animation: marquee 8s linear infinite;
+        }
+
+        .wrapper:nth-child(3) {
+            animation: marquee 9s linear infinite;
+        }
+
+        .wrapper:hover {
+            animation-play-state: paused;
+        }
+
+        .image {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .image:hover {
+            transform: scale(1.025);
+            transform-origin: top center;
+            cursor: pointer;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slideshow__infinito" data-mural='{"id_colecao": 29143,"tamanho_img": 250,"margin_right":20}'></div>
+    <div class="slideshow__infinito" data-mural='{"id_colecao": 29143,"tamanho_img": 150,"margin_right":10}'></div>
+</body>
+<script>
+
+
+    var callCollection = (id_colecao, tamanho_img, margin_right, index) => {
+        fetch(`https://api.saraiva.com.br/collection/products/${id_colecao}/0/0/1?l=21`)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                var eachImagePerLine;
+                var divisiveis = []
+                var divisivel = 3
+                data.total_count > 21 ? data.total_count = data.page_count : data.total_count < 12 ? divisivel = 3 : divisivel = 3
+
+                if (data.total_count % 3 != 0) {
+                    for (index = 0; index < data.total_count; index++) {
+
+                        if (index % 3 == 0) {
+                            divisiveis.push(index)
+                        }
+                    }
+                    eachImagePerLine = divisiveis[divisiveis.length - 1] / divisivel
+                } else {
+                    eachImagePerLine = data.total_count / 3
+                }
+                addCustomAnimation(tamanho_img, margin_right, data.total_count)
+                createWrappers(data, eachImagePerLine, tamanho_img, index)
+            });
+    }
+    var createWrappers = (data, eachImagePerLine, tamanho_img, index) => {
+
+        var slideShowDiv = document.querySelectorAll(`.slideshow__infinito`)[index]
+        data.products.forEach((element, index) => {
+            if (index % eachImagePerLine == 0) {
+                var div = document.createElement("div")
+                div.classList.add('wrapper')
+                slideShowDiv.appendChild(div)
+            }
+            
+        })
+        
+        createImages(slideShowDiv.children, eachImagePerLine, data.products, tamanho_img)
+    }
+    var createImages = (where, eachImagePerLine, products, tamanho_img) => {
+        for (const index in where) {
+            if (where.hasOwnProperty(index)) {
+                const element = where[index];
+                var clones = []
+                var clonesDoClone = []
+                products.slice(index * eachImagePerLine, (index * eachImagePerLine) + eachImagePerLine).forEach((product, index, productsArray) => {
+                    var div = document.createElement("div")
+                    var img = document.createElement("img")
+                    img.src = `${product.image}${tamanho_img}`
+                    div.classList.add("image")
+                    div.appendChild(img)
+                    element.appendChild(div)
+                    clone = div.cloneNode(true)
+                    clones.push(clone)
+                });
+                for (let j = 0; j < 4; j++) {
+                    clones.forEach(clone => {
+                        var cloneClone = clone.cloneNode(true)
+                        clonesDoClone.push(cloneClone)
+                        element.appendChild(clone)
+                    });
+                    clonesDoClone.forEach(clone => {
+                        element.appendChild(clone)
+                    })
+                }
+            }
+        }
+    }
+    var addCustomAnimation = (tamanho_img, margin, qtd_produtos) => {
+        var styles = document.styleSheets
+        var style = document.createElement("style")
+        style.appendChild(document.createTextNode(""))
+        document.head.appendChild(style)
+        
+        var sizeLeft = (tamanho_img + margin) * qtd_produtos
+        console.log(margin,tamanho_img,qtd_produtos, sizeLeft)
+        if ("insertRule" in styles[styles.length - 1]) {
+            styles[styles.length - 1].insertRule(`.image {margin-right: ${margin}px !important}`, styles)
+            styles[styles.length - 1].insertRule(`@keyframes marquee {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+        }
+        else if ("addRule" in styles[styles.length - 1]) {
+            styles[styles.length - 1].insertRule(`.image {margin-right: ${margin}px !important}`, styles)
+            styles[styles.length - 1].addRule(`@keyframes marquee {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+        }
+        return style.sheet;
+    }
+
+    document.querySelectorAll('.slideshow__infinito').forEach((element, index) => {
+        dataElement = JSON.parse(element.dataset.mural)
+        
+        callCollection(Number(dataElement.id_colecao), Number(dataElement.tamanho_img), Number(dataElement.margin_right), index)
+    });
+
+
+</script>
+
+</html>

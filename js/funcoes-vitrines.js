@@ -379,7 +379,7 @@ function vitrineLoader(lista, el) {
             '<figure>' +
             '<div class="seal ' + showDigitalSeal(showcaseProducts.digital) + '"></div>' +
             '<img alt="' + showcaseProducts.name + '" src="' + fixImageUrl(showcaseProducts) + '">' +
-            '<div class="figcaption">' +
+            '<figcaption>' +
             '<div class="content__product">' +
             '<div class="price-group">' +
             '<div class="preorder">' + validPre(showcaseProducts.presale) + '</div>' +
@@ -388,7 +388,7 @@ function vitrineLoader(lista, el) {
             '<div class="discount-cc">' + validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price) +
             '</div>' +
             '</div>' +
-            '</div>' +
+            '</figcaption>' +
             '</figure>' +
             '</a>' +
             '</div>';

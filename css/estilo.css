@@ -580,7 +580,8 @@ body {
 [data-vitrine] .product__estante img, [data-vitrine] .product__estante figcaption {
     display: table-caption;
     caption-side: bottom;
-    overflow-y: -webkit-paged-y;
+    writing-mode: unset;
+    -webkit-writing-mode: unset;
 }
 
 [data-vitrine] figcaption {

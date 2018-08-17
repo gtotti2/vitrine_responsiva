@@ -1,5 +1,5 @@
 var $ = jQuery;
-function vitrineLoader(lista, el) {
+var vitrineLoader = (lista, el) => {
     var showcaseProducts,
         htmlShowcase,
         htmlShowCaseAspirational,
@@ -127,7 +127,7 @@ function vitrineLoader(lista, el) {
             return status ? status : false
         }
 
-        (function (data) {
+        var timeUrgency = (data) => {
             const apiUrl = 'https://api.saraiva.com.br/';
             $.ajax({
                 url: `${apiUrl}produto/urgencycards/${data.sku}=${data.rule_urgency}`,
@@ -295,11 +295,12 @@ function vitrineLoader(lista, el) {
                     }
                 }
             });
-        })(this);
+        }
+
+        timeUrgency(this)
 
 
-        function toggleClassTime(time) {
-
+        var toggleClassTime = (time) => {
             if ($('.urgency__remaining-time').hasClass('active')) {
                 $('.urgency__remaining-time').slideUp(time, function () {
                     $(this).removeClass('active')
@@ -452,7 +453,7 @@ function vitrineLoader(lista, el) {
 
 }
 
-function htmlModal(product, id, sob, element) {
+var htmlModal = (product, id, sob, element) => {
     var warranty,
         insurance,
         classBtnDefault;
@@ -468,7 +469,7 @@ function htmlModal(product, id, sob, element) {
 
 
 
-    function funcRating(rating) {
+    var funcRating = (rating) => {
         if (rating > 0.0) {
             return 'rating-box';
         } else {
@@ -476,11 +477,11 @@ function htmlModal(product, id, sob, element) {
         }
     }
 
-    function limitarQtdCaracteres(params, size) {
+    var limitarQtdCaracteres = (params, size) => {
         return params.length > size ? params.substring(0, size) + '...' : params
     }
 
-    function validacaoPreco(por) {
+    var validacaoPreco = (por) => {
         if (por.nominal === por.final) {
             return '';
         } else {
@@ -488,7 +489,7 @@ function htmlModal(product, id, sob, element) {
         }
     }
 
-    function validacaoParcelamento(parce1, parce2) {
+    var validacaoParcelamento = (parce1, parce2) => {
         if (parce1.value_with_discount === parce2.nominal || parce1.has_discount === 0) {
             return '';
         } else if (parce1.has_discount !== 0) {
@@ -499,7 +500,7 @@ function htmlModal(product, id, sob, element) {
 
 
 
-    function validSaraiva(sara) {
+    var validSaraiva = (sara) => {
 
         var num = parseInt(sara.qty_installments_with_discount, 10);
         if (num === sara.qty_installments_without_fee) {
@@ -571,7 +572,11 @@ function htmlModal(product, id, sob, element) {
     $(element).closest('[data-vitrine]').find('.modal').append(htmlProduct);
 }
 
-function loadProduct(id, sob, element) {
+var sobEncomenda = (status) => {
+    return status ? status : false
+}
+
+var loadProduct = (id, sob, element) => {
     var sku = id;
     var sob = sob;
     $.ajax({
@@ -589,7 +594,7 @@ function loadProduct(id, sob, element) {
     });
 }
 
-function openModal(element) {
+var openModal = (element) => {
     var sku = $(element).data('sku');
     var sob = $(element).data('sob');
     var vitrine = $(element).closest('[data-vitrine]')
@@ -603,7 +608,7 @@ function openModal(element) {
     }
 }
 
-function closeModal() {
+var closeModal = () => {
     $('[data-vitrine] .modal, [data-vitrine] .overlay').fadeOut('slow', function () {
         $(this).remove()
     })
@@ -612,13 +617,13 @@ function closeModal() {
     }
 }
 
-function addToCardOnClick(e, element) {
+var addToCardOnClick = (e, element) => {
     e.preventDefault();
     var idSku = $(element).data('sku');
     cartCatalog.addToCart(idSku, 1);
 }
 
-function addToCartOnModal(e) {
+var addToCartOnModal = (e) => {
     e.preventDefault();
     var idSku = $(e.currentTarget).data('sku');
     cartCatalog.addToCart(idSku, 1);
@@ -645,7 +650,7 @@ function addToCartOnModal(e) {
     });
 }
 
-function dataTrack(element) {
+var dataTrack = (element) => {
     dataLayer.push({
         'event': 'productClick',
         'ecommerce': {
@@ -672,7 +677,7 @@ function dataTrack(element) {
 }
 
 
-function slickLoadAjax(thisSlider, id_vitrine) {
+var slickLoadAjax = (thisSlider, id_vitrine) => {
     var data = $(thisSlider).data("vitrine"),
         responsivo = $(thisSlider).data("responsivo"),
         slickOptions = $(thisSlider).data("slick-options"),
@@ -714,7 +719,7 @@ function slickLoadAjax(thisSlider, id_vitrine) {
     mobileScreen && data.tipo != "classicos" ? data.produtos_quantidade = 5 : data.produtos_quantidade = data.produtos_quantidade
 
 
-    function callAjax() {
+    var callAjax = () => {
         $.ajax({
             url: 'https://api.saraiva.com.br/collection/products/' + id_vitrine + '/0/0/1?l=' + data.produtos_quantidade,
             type: 'GET'
@@ -730,7 +735,7 @@ function slickLoadAjax(thisSlider, id_vitrine) {
             }).slick(slickOptions).addClass('active')
         })
     }
-    
+
     if (slicked) {
         $(thisSlider).fadeOut('fast', function () {
             $(this).slick('unslick').children().remove().promise().done(function () {
@@ -742,13 +747,94 @@ function slickLoadAjax(thisSlider, id_vitrine) {
     }
 }
 
-function loadSlicks() {
-    var vitrines = $('[data-vitrine]')
-    vitrines.each(function (index) {
-        var $this = $(this)
-        $(this).addClass($(this).data("vitrine").tipo)
-        slickLoadAjax($this)
+
+var callCollection = (id_colecao, tamanho_img, margin_right, index, element) => {
+    fetch(`https://api.saraiva.com.br/collection/products/${id_colecao}/0/0/1?l=21`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            var eachImagePerLine;
+            var divisiveis = []
+            var divisivel = 3
+            data.total_count > 21 ? data.total_count = data.page_count : data.total_count < 12 ? divisivel = 1.5 : divisivel = 3
+
+            if (data.total_count % 3 != 0) {
+                for (index = 0; index < data.total_count; index++) {
+                    if (index % 3 == 0) {
+                        divisiveis.push(index)
+                    }
+                }
+                eachImagePerLine = divisiveis[divisiveis.length - 1] / divisivel
+            } else {
+                eachImagePerLine = data.total_count / 3
+            }
+            addCustomAnimation(tamanho_img, margin_right, eachImagePerLine, element, index)
+            createWrappers(data, eachImagePerLine, tamanho_img, element, index)
+        });
+}
+var createWrappers = (data, eachImagePerLine, tamanho_img, element, index) => {
+    data.products.forEach((elem, index) => {
+        if (index % eachImagePerLine == 0) {
+            var div = document.createElement("div")
+            div.classList.add('wrapper')
+            element.appendChild(div)
+        }
     })
+
+    createImages(element.children, eachImagePerLine, data.products, tamanho_img)
+}
+var createImages = (where, eachImagePerLine, products, tamanho_img) => {
+    for (const index in where) {
+        if (where.hasOwnProperty(index)) {
+            const element = where[index];
+            var clones = []
+            var clonesDoClone = []
+            products.slice(index * eachImagePerLine, (index * eachImagePerLine) + eachImagePerLine).forEach(product => {
+                var div = document.createElement("div")
+                var img = document.createElement("img")
+                img.src = `${product.image}${tamanho_img}`
+                div.classList.add("image")
+                div.setAttribute('data-sku', product.sku)
+                div.setAttribute('data-sob', sobEncomenda(product.back_order))
+                div.setAttribute('id', `coleAspi__showcase-${product.id}`)
+                div.appendChild(img)
+                element.appendChild(div)
+                clone = div.cloneNode(true)
+                clones.push(clone)
+            });
+            for (let j = 0; j < 4; j++) {
+                clones.forEach(clone => {
+                    var cloneClone = clone.cloneNode(true)
+                    clonesDoClone.push(cloneClone)
+                    element.appendChild(clone)
+                });
+                clonesDoClone.forEach(clone => {
+                    element.appendChild(clone)
+                })
+            }
+        }
+    }
+}
+var addCustomAnimation = (tamanho_img, margin, qtd_produtos, element, index) => {
+    element.classList.add(`infinito_${index}`)
+    var styles = document.styleSheets
+    var style = document.createElement("style")
+    style.appendChild(document.createTextNode(""))
+    document.head.appendChild(style)
+    var sizeLeft = (tamanho_img + margin) * qtd_produtos
+    if ("insertRule" in styles[styles.length - 1]) {
+        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+        styles[styles.length - 1].insertRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
+    }
+    else if ("addRule" in styles[styles.length - 1]) {
+        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+        styles[styles.length - 1].addRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
+
+    }
+    return style.sheet;
 }
 
 
@@ -786,6 +872,28 @@ $(document).ready(function () {
         $this.closest('.row').find('[data-button-vitrine]').children('a').attr('href', thisUrl)
     })
 
+
+    $('[data-vitrine]').each(function (index, element) {
+
+
+    })
+
+    $('[data-vitrine]').on('click', '.image', function (e) {
+        openModal(e.currentTarget)
+    })
+
+    $('[data-vitrine]').each(function (index, element) {
+        var $this = $(this)
+        if ($this.data('vitrine').tipo == "mural") {
+            dataElement = $this.data('vitrine')
+            callCollection(Number(dataElement.id_colecao), Number(dataElement.tamanho_img), Number(dataElement.margin_right), index, element)
+        } else {
+            $this.addClass($this.data("vitrine").tipo)
+            slickLoadAjax($this)
+        }
+
+    })
+
     function checkForChanges() {
         if ($('[data-vitrine] .product__estante').length) {
             $('[data-vitrine].estante figcaption').each(function () {
@@ -799,7 +907,6 @@ $(document).ready(function () {
         }
     }
 
-    loadSlicks()
     checkForChanges()
     width = $(window).width()
 

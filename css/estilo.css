@@ -1223,26 +1223,32 @@ body {
 
 /* MURAL */
 
-/* ebooks */
-
-[data-vitrine].mural .slick-slide {
-    height: auto;
-    margin: 20px 0;
-}
-
-[data-vitrine].mural .slick-slide>div {
-    margin: 50px 0px;
-}
-
-[data-vitrine].mural .slick-slide img {
-    margin: 0 auto;
-}
-
-[data-vitrine].mural .slick-slide>div:nth-child(2) {
-    transform: translateX(50%);
+[data-vitrine].mural {
     overflow: hidden;
 }
 
+[data-vitrine].mural>.wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+[data-vitrine].mural>.wrapper:hover {
+    animation-play-state: paused !important;
+}
+
+[data-vitrine].mural>.wrapper>.image {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+
+[data-vitrine].mural>.wrapper>.image:hover {
+    transform: scale(1.025);
+    transform-origin: top center;
+    cursor: pointer;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
 
 /* RESPONSIVE */
 

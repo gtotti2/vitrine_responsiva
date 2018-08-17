@@ -7,36 +7,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .slideshow__infinito {
+        [data-mural] {
             overflow: hidden;
         }
 
-        .wrapper {
+        [data-mural] > .wrapper {
             display: flex;
             flex-flow: row nowrap;
-            animation: marquee 10s linear infinite;
         }
 
-        .wrapper:nth-child(2) {
-            animation: marquee 8s linear infinite;
+        [data-mural] > .wrapper:hover {
+            animation-play-state: paused !important;
         }
 
-        .wrapper:nth-child(3) {
-            animation: marquee 9s linear infinite;
-        }
-
-        .wrapper:hover {
-            animation-play-state: paused;
-        }
-
-        .image {
+        [data-mural] > .wrapper > .image {
             display: flex;
             align-items: stretch;
             margin-bottom: 10px;
             transition: all 0.5s ease;
         }
 
-        .image:hover {
+        [data-mural] > .wrapper > .image:hover {
             transform: scale(1.025);
             transform-origin: top center;
             cursor: pointer;
@@ -46,13 +37,12 @@
 </head>
 
 <body>
-    <div class="slideshow__infinito" data-mural='{"id_colecao": 29143,"tamanho_img": 250,"margin_right":20}'></div>
-    <div class="slideshow__infinito" data-mural='{"id_colecao": 29143,"tamanho_img": 150,"margin_right":10}'></div>
+    <div class="slideshow__infinito" data-mural='{"id_colecao": 29143,"tamanho_img": 120,"margin_right":30}'></div>
 </body>
 <script>
 
 
-    var callCollection = (id_colecao, tamanho_img, margin_right, index) => {
+    var callCollection = (id_colecao, tamanho_img, margin_right, index, element) => {
         fetch(`https://api.saraiva.com.br/collection/products/${id_colecao}/0/0/1?l=21`)
             .then(function (response) {
                 return response.json();
@@ -61,11 +51,10 @@
                 var eachImagePerLine;
                 var divisiveis = []
                 var divisivel = 3
-                data.total_count > 21 ? data.total_count = data.page_count : data.total_count < 12 ? divisivel = 3 : divisivel = 3
+                data.total_count > 21 ? data.total_count = data.page_count : data.total_count < 12 ? divisivel = 1.5 : divisivel = 3
 
                 if (data.total_count % 3 != 0) {
                     for (index = 0; index < data.total_count; index++) {
-
                         if (index % 3 == 0) {
                             divisiveis.push(index)
                         }
@@ -74,7 +63,7 @@
                 } else {
                     eachImagePerLine = data.total_count / 3
                 }
-                addCustomAnimation(tamanho_img, margin_right, data.total_count)
+                addCustomAnimation(tamanho_img, margin_right, eachImagePerLine, index, element)
                 createWrappers(data, eachImagePerLine, tamanho_img, index)
             });
     }
@@ -87,9 +76,8 @@
                 div.classList.add('wrapper')
                 slideShowDiv.appendChild(div)
             }
-            
         })
-        
+
         createImages(slideShowDiv.children, eachImagePerLine, data.products, tamanho_img)
     }
     var createImages = (where, eachImagePerLine, products, tamanho_img) => {
@@ -121,29 +109,30 @@
             }
         }
     }
-    var addCustomAnimation = (tamanho_img, margin, qtd_produtos) => {
+    var addCustomAnimation = (tamanho_img, margin, qtd_produtos, index, element) => {
+        element.classList.add(`infinito_${index}`)
         var styles = document.styleSheets
         var style = document.createElement("style")
         style.appendChild(document.createTextNode(""))
         document.head.appendChild(style)
-        
+        console.log(qtd_produtos)
         var sizeLeft = (tamanho_img + margin) * qtd_produtos
-        console.log(margin,tamanho_img,qtd_produtos, sizeLeft)
         if ("insertRule" in styles[styles.length - 1]) {
-            styles[styles.length - 1].insertRule(`.image {margin-right: ${margin}px !important}`, styles)
-            styles[styles.length - 1].insertRule(`@keyframes marquee {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+            styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+            styles[styles.length - 1].insertRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+            styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
         }
         else if ("addRule" in styles[styles.length - 1]) {
-            styles[styles.length - 1].insertRule(`.image {margin-right: ${margin}px !important}`, styles)
-            styles[styles.length - 1].addRule(`@keyframes marquee {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+            styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+            styles[styles.length - 1].addRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
+            styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
+
         }
         return style.sheet;
     }
-
     document.querySelectorAll('.slideshow__infinito').forEach((element, index) => {
         dataElement = JSON.parse(element.dataset.mural)
-        
-        callCollection(Number(dataElement.id_colecao), Number(dataElement.tamanho_img), Number(dataElement.margin_right), index)
+        callCollection(Number(dataElement.id_colecao), Number(dataElement.tamanho_img), Number(dataElement.margin_right), index, element)
     });
 
 

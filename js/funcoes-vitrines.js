@@ -777,7 +777,7 @@ var createWrappers = (data, eachImagePerLine, tamanho_img, element, index) => {
     data.products.forEach((elem, index) => {
         if (index % eachImagePerLine == 0) {
             var div = document.createElement("div")
-            div.classList.add('wrapper')
+            div.classList.add('row__slider')
             element.appendChild(div)
         }
     })
@@ -824,12 +824,12 @@ var addCustomAnimation = (tamanho_img, margin, qtd_produtos, element, index) => 
     document.head.appendChild(style)
     var sizeLeft = (tamanho_img + margin) * qtd_produtos
     if ("insertRule" in styles[styles.length - 1]) {
-        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .row__slider {animation: infinito_${index} 15s linear infinite;}`, styles)
         styles[styles.length - 1].insertRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
         styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
     }
     else if ("addRule" in styles[styles.length - 1]) {
-        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .wrapper {animation: infinito_${index} 15s linear infinite;}`, styles)
+        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .row__slider {animation: infinito_${index} 15s linear infinite;}`, styles)
         styles[styles.length - 1].addRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
         styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
 

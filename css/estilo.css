@@ -950,6 +950,7 @@ body {
     font-size: 26px;
     font-weight: 300;
     color: #818181;
+    text-align: left;
 }
 
 [data-vitrine] .left__content .rating {

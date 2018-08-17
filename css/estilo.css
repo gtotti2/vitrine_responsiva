@@ -1224,18 +1224,21 @@ body {
     animation-play-state: paused !important;
 }
 
-[data-vitrine].mural>.row__slider>.image {
+[data-vitrine].mural>.row__slider>.img__slider {
     display: flex;
     align-items: stretch;
     margin-bottom: 10px;
     transition: all 0.5s ease;
 }
 
-[data-vitrine].mural>.row__slider>.image:hover {
+[data-vitrine].mural>.row__slider>.img__slider:hover {
     transform: scale(1.025);
     transform-origin: top center;
     cursor: pointer;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+[data-vitrine].mural>.row__slider>.img__slider img{
+    max-width: fit-content;
 }
 
 /* RESPONSIVE */

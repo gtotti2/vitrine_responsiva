@@ -794,7 +794,7 @@ var createImages = (where, eachImagePerLine, products, tamanho_img) => {
                 var div = document.createElement("div")
                 var img = document.createElement("img")
                 img.src = `${product.image}${tamanho_img}`
-                div.classList.add("image")
+                div.classList.add("img__slider")
                 div.setAttribute('data-sku', product.sku)
                 div.setAttribute('data-sob', sobEncomenda(product.back_order))
                 div.setAttribute('id', `coleAspi__showcase-${product.id}`)
@@ -826,12 +826,12 @@ var addCustomAnimation = (tamanho_img, margin, qtd_produtos, element, index) => 
     if ("insertRule" in styles[styles.length - 1]) {
         styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .row__slider {animation: infinito_${index} 15s linear infinite;}`, styles)
         styles[styles.length - 1].insertRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
-        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
+        styles[styles.length - 1].insertRule(`.slideshow__infinito.infinito_${index} .img__slider {margin-right: ${margin}px !important}`, styles)
     }
     else if ("addRule" in styles[styles.length - 1]) {
         styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .row__slider {animation: infinito_${index} 15s linear infinite;}`, styles)
         styles[styles.length - 1].addRule(`@keyframes infinito_${index} {0% {transform: translate3d(0,0,0);}100% {transform: translate3d(-${sizeLeft}px,0,0);}}`, styles)
-        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .image {margin-right: ${margin}px !important}`, styles)
+        styles[styles.length - 1].addRule(`.slideshow__infinito.infinito_${index} .img__slider {margin-right: ${margin}px !important}`, styles)
 
     }
     return style.sheet;
@@ -878,7 +878,7 @@ $(document).ready(function () {
 
     })
 
-    $('[data-vitrine]').on('click', '.image', function (e) {
+    $('[data-vitrine]').on('click', '.img__slider', function (e) {
         openModal(e.currentTarget)
     })
 

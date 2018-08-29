@@ -128,7 +128,7 @@ body {
 [data-vitrine] .product__content {
     box-sizing: border-box;
     position: relative;
-    padding: 24px 0px 0px;
+    padding: 20px 0px 0px;
     height: 194px;
     text-align: left;
     display: flex;
@@ -146,14 +146,39 @@ body {
     box-sizing: border-box;
     background: #ff6200;
     color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4em;
+    height: 28px;
     text-transform: uppercase;
     display: flex;
     flex-flow: row wrap;
-    padding: 3px 10%;
-    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 14px;
+    padding: 0px 20px;
+    margin: 10px 12px 0px;
+    color: #ffffff;
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1.4em;
+}
+
+[data-vitrine] .urgency.esgotado {
+    background: #818181;
+}
+
+[data-vitrine] .urgency>.urgency__remaining-items {
+    margin-left: auto;
+}
+
+[data-vitrine] .urgency__wrap.small>.urgency {
+    justify-content: center;
+}
+
+[data-vitrine] .urgency__wrap.small>.urgency>.urgency__remaining-items {
+    margin: 0 auto;
+    display: none;
+}
+
+[data-vitrine] .urgency__wrap.small>.urgency>.urgency__remaining-items.active {
+    display: block;
 }
 
 [data-vitrine] .urgency span {
@@ -162,7 +187,7 @@ body {
 
 [data-vitrine] .urgency .icon-clock {
     position: relative;
-    display: inline-block;
+    margin: 0px 5px;
     width: 20px;
     height: 20px;
     border: 1px solid #fff;
@@ -191,11 +216,6 @@ body {
     background: white;
     transform: rotate(-150deg);
     transform-origin: bottom;
-}
-
-[data-vitrine] .urgency .urgency__remaining-time, [data-vitrine] .urgency .urgency__remaining-items {
-    display: none;
-    flex-basis: 80px;
 }
 
 [data-vitrine] .urgency .urgency__remaining-time.active, [data-vitrine] .urgency .urgency__remaining-items.active {
@@ -240,7 +260,7 @@ body {
 
 [data-vitrine] .product__content .content__left figure img {
     margin: 0 auto;
-    max-width: 100%;
+    width: 100%;
     max-height: 160px;
 }
 
@@ -1164,25 +1184,27 @@ body {
 }
 
 /* ebooks */
-
+[data-vitrine].ebooks .slick-track{
+    margin: 0 -5px;
+}
 [data-vitrine] .product__ebooks {
     text-align: center;
     position: relative;
     height: auto;
-    margin: 0 2.5px;
+    margin: 0 5px;
 }
-[data-vitrine] .product__ebooks figure{
-    margin: 0;
-    display: flex;
-    align-items: stretch;
-    max-height: 220px;
-    overflow: hidden;
-    width: 100%;
+
+
+[data-vitrine] .product__ebooks figure {
+    margin: 0 auto;
+    max-width: 200px;
+    max-height: 250px;
 }
+
 [data-vitrine] .product__ebooks img {
-    margin-top: 10px;
-    width: 100%;
-    height: auto;
+    margin: 10px auto;
+    width: auto;
+    height: 100%;
 }
 
 [data-vitrine] .product__ebooks .seal {
@@ -1216,6 +1238,7 @@ body {
 [data-vitrine].mural {
     overflow: hidden;
 }
+
 [data-vitrine].mural>.row__slider {
     display: flex;
     flex-flow: row nowrap;
@@ -1238,7 +1261,8 @@ body {
     cursor: pointer;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 }
-[data-vitrine].mural>.row__slider>.img__slider img{
+
+[data-vitrine].mural>.row__slider>.img__slider img {
     max-width: fit-content;
 }
 
@@ -1335,6 +1359,10 @@ body {
 }
 
 @media (max-width: 325px) {
+    [data-vitrine] .product__content .content__left figure img {
+        max-width: 100px;
+        height: auto;
+    }
     .vitrine__classicos [data-vitrine] .box__img-prod img {
         height: 160px;
         border-top-left-radius: 5px;
@@ -1365,9 +1393,9 @@ body {
         max-width: 60%;
     }
     [data-menu-vitrine="vertical"] {
-        flex-basis: 20%;
+        flex-basis: 25%;
     }
     [data-menu-vitrine="vertical"]+[data-vitrine] {
-        flex-basis: 80%;
+        flex-basis: 75%;
     }
 }

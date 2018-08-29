@@ -1,5 +1,6 @@
 var $ = jQuery;
 var vitrineLoader = (lista, el) => {
+    
     var showcaseProducts,
         htmlShowcase,
         htmlShowCaseAspirational,
@@ -126,7 +127,6 @@ var vitrineLoader = (lista, el) => {
         function sobEncomenda(status) {
             return status ? status : false
         }
-
         var timeUrgency = (data) => {
             const apiUrl = 'https://api.saraiva.com.br/';
             $.ajax({
@@ -257,16 +257,16 @@ var vitrineLoader = (lista, el) => {
                                 let remainText;
                                 if (remainingItems > 1) {
                                     remainText = 'Restam '
-                                }
-                                else {
+                                    //urgency.classList.add('esgotado')
+                                } else if (remainingItems < 1) {
                                     remainText = 'Resta '
+                                    urgency.classList.add('esgotado')
                                 }
 
                                 urgencyRemainingItems.textContent = remainText + remainingItems;
                             }
                             else {
                                 urgency.classList.add('urgency--center');
-
                                 urgencyRemainingItems.classList.add('hide');
                             }
 
@@ -289,9 +289,15 @@ var vitrineLoader = (lista, el) => {
                             return urgencyWrap
                         }
                         var retorno = urgencyCounter(urgencyOptions)
-                        $(`.product__comum[data-sku="${data.sku}"]`).prepend(retorno)
+                        var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                        if (windowWidth <= 320) {
+                            $(retorno).addClass('small')
+                            setInterval(toggleClassTime, 3000, 200)
+                        }
 
-                        setInterval(toggleClassTime, 3000, 200);
+                        $(el).find(`.product__comum[data-sku="${data.sku}"]`).prepend(retorno)
+
+
                     }
                 }
             });
@@ -301,15 +307,21 @@ var vitrineLoader = (lista, el) => {
 
 
         var toggleClassTime = (time) => {
-            if ($('.urgency__remaining-time').hasClass('active')) {
-                $('.urgency__remaining-time').slideUp(time, function () {
+
+
+            var lastChildren = $('.urgency').children('.urgency__remaining-items'),
+                childrensNotLast = $('.urgency').children().not(':last-child')
+
+
+            if (lastChildren.hasClass('active')) {
+                lastChildren.slideUp(time, function () {
                     $(this).removeClass('active')
-                    $('.urgency__remaining-items').slideDown(time).addClass('active')
+                    childrensNotLast.slideDown(time).addClass('active')
                 })
             } else {
-                $('.urgency__remaining-items').slideUp(time, function () {
+                childrensNotLast.slideUp(time, function () {
                     $(this).removeClass('active')
-                    $('.urgency__remaining-time').slideDown(time).addClass('active')
+                    lastChildren.slideDown(time).addClass('active')
                 })
             }
 
@@ -749,48 +761,52 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
 
 var callCollection = (id_colecao, tamanho_img, margin_right, index, element) => {
-    fetch(`https://api.saraiva.com.br/collection/products/${id_colecao}/0/0/1?l=21`)
+
+    fetch(`https://api.saraiva.com.br/collection/products/${id_colecao}/0/0/1?l=22`)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
-            var eachImagePerLine;
+            tamanho_img < 150 || typeof tamanho_img != "number" ? tamanho_img = 150 : tamanho_img
+            var lastDivisible;
             var divisiveis = []
-            var divisivel = 3
-            data.total_count > 21 ? data.total_count = data.page_count : data.total_count < 12 ? divisivel = 1.5 : divisivel = 3
+            var divisivel = 2
+            data.total_count > 22 ? data.total_count = data.page_count : data.total_count
 
-            if (data.total_count % 3 != 0) {
+            if (data.total_count % divisivel != 0) {
+
                 for (index = 0; index < data.total_count; index++) {
-                    if (index % 3 == 0) {
+                    if (index % divisivel == 0) {
+
                         divisiveis.push(index)
                     }
                 }
-                eachImagePerLine = divisiveis[divisiveis.length - 1] / divisivel
+                lastDivisible = divisiveis[divisiveis.length - 1] / divisivel
             } else {
-                eachImagePerLine = data.total_count / 3
+                lastDivisible = data.total_count / divisivel
             }
-            addCustomAnimation(tamanho_img, margin_right, eachImagePerLine, element, index)
-            createWrappers(data, eachImagePerLine, tamanho_img, element, index)
+            addCustomAnimation(tamanho_img, margin_right, lastDivisible, element, index)
+            createWrappers(data, lastDivisible, divisivel, tamanho_img, element, index)
         });
 }
-var createWrappers = (data, eachImagePerLine, tamanho_img, element, index) => {
-    data.products.forEach((elem, index) => {
-        if (index % eachImagePerLine == 0) {
+var createWrappers = (data, lastDivisible, divisivel, tamanho_img, element, index) => {
+
+    data.products.slice(0, lastDivisible * divisivel).forEach((elem, index) => {
+        if (index % lastDivisible == 0) {
             var div = document.createElement("div")
             div.classList.add('row__slider')
             element.appendChild(div)
         }
     })
-
-    createImages(element.children, eachImagePerLine, data.products, tamanho_img)
+    createImages(element.children, lastDivisible, data.products, tamanho_img)
 }
-var createImages = (where, eachImagePerLine, products, tamanho_img) => {
+var createImages = (where, lastDivisible, products, tamanho_img) => {
     for (const index in where) {
         if (where.hasOwnProperty(index)) {
             const element = where[index];
             var clones = []
             var clonesDoClone = []
-            products.slice(index * eachImagePerLine, (index * eachImagePerLine) + eachImagePerLine).forEach(product => {
+            products.slice(index * lastDivisible, (index * lastDivisible) + lastDivisible).forEach(product => {
                 var div = document.createElement("div")
                 var img = document.createElement("img")
                 img.src = `${product.image}${tamanho_img}`

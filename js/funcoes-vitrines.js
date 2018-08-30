@@ -100,11 +100,11 @@ var vitrineLoader = (lista, el) => {
             if (parce1.value_with_discount === parce2.nominal) {
                 return '';
             } else if (parce1.value_with_discount === parce2.value_installments_without_fee) {
-                return 'em até ' + parce1.qty_installments_with_discount + 'x no cartão de crédito';
+                return 'em até ' + parce1.qty_installments_with_discount + 'x no crédito';
             } else if (parce1.has_discount !== 0 && parce2.value_installments_without_fee == 0) {
-                return 'em até ' + parce1.qty_installments_with_discount + 'x no cartão de crédito';
+                return 'em até ' + parce1.qty_installments_with_discount + 'x no crédito';
             }
-            return 'em ' + parce1.qty_installments_with_discount + 'x no cartão de crédito ou em até ' + parce2.qty_installments_without_fee + 'x de R$ ' + parce2.value_installments_without_fee + ' ';
+            return 'em ' + parce1.qty_installments_with_discount + 'x no crédito ou em até ' + parce2.qty_installments_without_fee + 'x de R$ ' + parce2.value_installments_without_fee + ' ';
         }
 
         function validSaraiva(sara) {

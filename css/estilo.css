@@ -794,6 +794,231 @@ body {
     cursor: pointer;
 }
 
+[data-vitrine] .product__comum {
+    height: auto;
+    min-width: auto;
+    margin: 0;
+    background: #fff;
+    font-size: 14px;
+    border: 2px solid #f0f3f6;
+}
+
+[data-vitrine] .product__comum .box__product {
+    border-top: 1px solid #dfe3e6;
+    margin: 0 8%;
+    text-decoration: none;
+    color: initial;
+    display: flex;
+    flex-direction: column;
+}
+
+[data-vitrine] .product__comum .product__pic {
+    display: flex;
+    flex-direction: column;
+    height: 217px;
+}
+
+[data-vitrine] .product__comum .product__pic figure {
+    position: relative;
+    margin: 0;
+}
+
+[data-vitrine] .product__comum .product__pic figure>.tagSale {
+    background: #ffc400;
+    left: -25.75px;
+    width: 48px;
+    position: absolute;
+    text-align: center;
+    bottom: 0px;
+    font-size: 1.1em;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 33px;
+}
+
+[data-vitrine] .product__comum .product__pic figure>.tagSale:after {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    right: -17px;
+    border: solid transparent;
+    border-width: 17px;
+    border-left-color: #ffc400;
+    border-right-width: 0;
+}
+
+[data-vitrine] .product__comum .product__pic figure>img {
+    margin-top: 19px;
+    height: 172px;
+    width: 100%;
+    object-fit: contain;
+    position: relative;
+}
+
+[data-vitrine] .product__comum .product__pic>.product__seal {
+    margin: 0 auto;
+    max-width: 147px;
+    border-radius: 20px;
+    height: 20px;
+    background-color: #24282b;
+    font-size: .8em;
+    font-weight: 600;
+    line-height: 2em;
+    letter-spacing: normal;
+    color: #f2ca12;
+    margin-top: auto;
+}
+
+[data-vitrine] .product__comum .product__info {
+    margin-top: 6px;
+    text-align: left;
+}
+
+[data-vitrine] .product__comum .product__info .product__status {
+    font-size: .91em;
+    font-weight: 600;
+    line-height: 1.2em;
+    text-align: left;
+    color: #1d6cff;
+    height: 15px;
+}
+
+[data-vitrine] .product__comum .product__info .product__title {
+    font-size: 1em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2em;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000000;
+    margin: 6px 0px 0px;
+}
+
+[data-vitrine] .product__comum .product__info .product__title--expanded {
+    min-height: 36px
+}
+
+[data-vitrine] .product__comum .product__info .book__author {
+    font-size: .85em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2em;
+    text-align: left;
+    color: #000000;
+    margin: 7px 0px 0px;
+}
+
+[data-vitrine] .product__comum .product__rating {
+    height: 18px;
+    margin-bottom: 9px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+[data-vitrine] .product__comum .product__rating .rating__grade {
+    height: 100%;
+    width: 90px;
+    background: url('https://www.saraiva.com.br/skin/frontend/saraiva/responsive/images/bkg_rating.png') repeat-x scroll left bottom;
+}
+
+[data-vitrine] .product__comum .product__rating .rating__grade .grade {
+    height: 100%;
+    background: url(https://www.saraiva.com.br/skin/frontend/saraiva/responsive/images/bkg_rating.png) repeat-x scroll left top transparent;
+    overflow: hidden;
+    width: 0%;
+}
+
+[data-vitrine] .product__comum .product__rating .product__reviews {
+    font-size: .85em;
+    line-height: 1.1em;
+    color: #8c9ba4;
+    margin-left: 5px;
+}
+
+[data-vitrine] .product__comum .product__price {
+    margin-top: auto;
+    text-align: left;
+}
+
+[data-vitrine] .product__comum .product__price .price__before {
+    font-size: .85em;
+    line-height: 1.1em;
+    color: #8c9ba4;
+    margin-bottom: 4px;
+    height: 11px;
+    text-decoration: line-through;
+}
+
+[data-vitrine] .product__comum .product__price .price__after {
+    font-size: 1.71em;
+    line-height: 0.9em;
+    text-align: left;
+    color: #010101;
+}
+
+[data-vitrine] .product__comum .product__conditions {
+    font-size: .85em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 13px;
+    height: 26px;
+}
+
+[data-vitrine] .product__comum .product__cta {
+    height: 40px;
+    border-radius: 5px;
+    background-color: #fff;
+    border: solid 0.5px #000000;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+[data-vitrine] .product__comum .product__cta button {
+    border: 0px solid transparent;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+[data-vitrine] .product__comum .product__cta:hover button {
+    background: #fd0;
+    cursor: pointer;
+}
+
+[data-vitrine] .product__comum .product__cta button:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url(https://www.saraiva.com.br/app-build/img/global/sprite.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0em -12em;
+    height: 20px;
+    width: 20px;
+}
+
 [data-vitrine] .product__aspirational {
     list-style: none;
     display: inline-block;
@@ -1186,16 +1411,17 @@ body {
 }
 
 /* ebooks */
-[data-vitrine].ebooks .slick-track{
+
+[data-vitrine].ebooks .slick-track {
     margin: 0 -5px;
 }
+
 [data-vitrine] .product__ebooks {
     text-align: center;
     position: relative;
     height: auto;
     margin: 0 5px;
 }
-
 
 [data-vitrine] .product__ebooks figure {
     margin: 0 auto;

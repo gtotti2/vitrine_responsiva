@@ -1,6 +1,6 @@
 var $ = jQuery;
 var vitrineLoader = (lista, el) => {
-    
+
     var showcaseProducts,
         htmlShowcase,
         htmlShowCaseAspirational,
@@ -63,7 +63,7 @@ var vitrineLoader = (lista, el) => {
         }
 
         function validateSale(sale) {
-            return sale > 0 ? '<span class="tagSale lazyAtivado show"> -' + sale + '% </span>' : ''
+            return sale > 0 ? '<span class="tagSale"> -' + sale + '% </span>' : ''
         }
 
         function validAuthors(authors, data) {
@@ -85,7 +85,7 @@ var vitrineLoader = (lista, el) => {
         }
 
         function validPre(pre) {
-            return pre !== 0 ? 'pré-venda' : '';
+            return pre ? 'pré-venda' : '';
         }
 
         function validPrace(por) {
@@ -303,8 +303,8 @@ var vitrineLoader = (lista, el) => {
             });
         }
 
-        timeUrgency(this)
 
+        //timeUrgency(this)
 
         var toggleClassTime = (time) => {
 
@@ -325,6 +325,22 @@ var vitrineLoader = (lista, el) => {
                 })
             }
 
+        }
+
+        var ratingPerCent = (rating, reviews_count) => {
+            return reviews_count ? `<div class="rating__grade"><div class="grade" style="width: ${rating}%;"></div></div><div class="product__reviews">(${reviews_count})</div>` : ``
+        }
+
+
+        var titleAndAuthor = (data) => {
+            var authors = data.authors
+            authorsName = authors.map(author => `
+            <h2 class="product__title">${doTruncarStr(data.name, 30)}</h2>
+            <h3 class="book__author">${doTruncarStr(author.name, 40)}</h3>
+            `) 
+            
+            onlyTitle = `<h2 class="product__title product__title--expanded">${doTruncarStr(data.name, 60)}</h2>`
+            return authors.length ? authorsName : onlyTitle
         }
 
 
@@ -384,7 +400,33 @@ var vitrineLoader = (lista, el) => {
             '<button type="button" title="Comprar" class="' + classBtnDefault + '" data-sku="' + showcaseProducts.sku + '" id="btn-cart">Adicionar ao Carrinho</button>' +
             '</div>' +
             '</div>' +
-            '</li>';
+            '</li>'
+
+        htmlShowcase = `
+        <div class="product__comum" data-sku="${showcaseProducts.sku}" data-track="true" data-track-list="${productObj.list}"data-track-name="${productObj.name}" data-track-id="${productObj.id}" data-track-price="${productObj.price}" data-track-brand="${productObj.brand}"  data-track-category="${productObj.category}" data-track-variant="${productObj.variant}" data-track-position="${productObj.position}" data-track-vitrine="${productObj.vitrine}">
+            <a href="${showcaseProducts.url}" class="box__product">
+                <div class="product__pic">
+                    <figure>
+                        <img src="${fixImageUrl(showcaseProducts)}" alt="${showcaseProducts.name}">
+                        ${validateSale(showcaseProducts.price_block.price.discount_percent)}
+                    </figure>
+                    <div class="product__seal">${validateOnSale(showcaseProducts.on_sale)}</div>
+                </div>
+                <div class="product__info">
+                    <div class="product__status">${validPre(showcaseProducts.presale)}</div>
+                    ${titleAndAuthor(showcaseProducts)}
+                    <div class="product__rating">${ratingPerCent(showcaseProducts.reviews_stars_width, showcaseProducts.reviews_count)}</div>
+                </div>
+                <div class="product__price">
+                    <div class="price__before">${validPrace(showcaseProducts.price_block.price)}</div>
+                    <div class="price__after">R$ ${showcaseProducts.price_block.credit_card.value_with_discount}</div>
+                    <div class="product__conditions">${validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price)}</div>
+                    <div class="product__cta content__action">
+                        <button type="button" title="Comprar" class="classBtnDefault" data-sku="${showcaseProducts.sku}" id="btn-cart"></button>
+                    </div>
+                </div>
+            </a>
+        </div>`
 
         htmlShowcaseEstante =
             '<div class="product__estante" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +

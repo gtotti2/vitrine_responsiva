@@ -796,26 +796,62 @@ body {
 
 [data-vitrine] .product__comum {
     height: auto;
-    min-width: auto;
     margin: 0;
     background: #fff;
     font-size: 14px;
     border: 2px solid #f0f3f6;
+    display: flex;
 }
 
 [data-vitrine] .product__comum .box__product {
     border-top: 1px solid #dfe3e6;
+    min-height: 455px;
     margin: 0 8%;
-    text-decoration: none;
-    color: initial;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+[data-vitrine] .product__comum .box__product>a {
+    color: initial;
+    text-decoration: none;
+    display: inline;
 }
 
 [data-vitrine] .product__comum .product__pic {
     display: flex;
     flex-direction: column;
-    height: 217px;
+}
+
+[data-vitrine] .product__comum .product__pic .seal {
+    margin: 0 auto;
+    margin: 0 auto;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 100%;
+}
+
+[data-vitrine] .product__comum .product__pic .seal.digital:before {
+    content: 'e-book';
+    padding: 7px 14px 8px;
+    margin: 0px auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 70px;
+    border-radius: 5px;
+    background-color: #1d6dff;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+    font-size: 1em;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
 }
 
 [data-vitrine] .product__comum .product__pic figure {
@@ -856,7 +892,7 @@ body {
     border-right-width: 0;
 }
 
-[data-vitrine] .product__comum .product__pic figure>img {
+[data-vitrine] .product__comum .product__pic figure img {
     margin-top: 19px;
     height: 172px;
     width: 100%;
@@ -864,24 +900,17 @@ body {
     position: relative;
 }
 
-[data-vitrine] .product__comum .product__pic>.product__seal {
-    margin: 0 auto;
-    max-width: 147px;
-    border-radius: 20px;
-    height: 20px;
-    background-color: #24282b;
-    font-size: .8em;
-    font-weight: 600;
-    line-height: 2em;
-    letter-spacing: normal;
-    color: #f2ca12;
-    margin-top: auto;
+[data-vitrine] .product__comum .product__pic>.product__seal .content__category {
+    margin: 5px auto 6px;
 }
 
 [data-vitrine] .product__comum .product__info {
-    margin-top: 6px;
     text-align: left;
 }
+
+/* [data-vitrine] .product__comum .product__info>* {
+    border: 1px solid #333;
+} */
 
 [data-vitrine] .product__comum .product__info .product__status {
     font-size: .91em;
@@ -917,27 +946,38 @@ body {
     text-align: left;
     color: #000000;
     margin: 7px 0px 0px;
+    margin-bottom: 5px;
 }
 
 [data-vitrine] .product__comum .product__rating {
-    height: 18px;
-    margin-bottom: 9px;
     display: flex;
-    flex-direction: row;
     align-items: flex-end;
+    position: relative;
 }
 
 [data-vitrine] .product__comum .product__rating .rating__grade {
-    height: 100%;
+    height: 18px;
     width: 90px;
     background: url('https://www.saraiva.com.br/skin/frontend/saraiva/responsive/images/bkg_rating.png') repeat-x scroll left bottom;
 }
 
 [data-vitrine] .product__comum .product__rating .rating__grade .grade {
-    height: 100%;
     background: url(https://www.saraiva.com.br/skin/frontend/saraiva/responsive/images/bkg_rating.png) repeat-x scroll left top transparent;
     overflow: hidden;
     width: 0%;
+    height: 18px;
+}
+
+[data-vitrine] .product__comum .product__seller {
+    margin-top: 9px;
+    font-size: .71em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.6em;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
 }
 
 [data-vitrine] .product__comum .product__rating .product__reviews {
@@ -962,13 +1002,47 @@ body {
 }
 
 [data-vitrine] .product__comum .product__price .price__after {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+[data-vitrine] .product__comum .product__price .price__after .price {
     font-size: 1.71em;
     line-height: 0.9em;
     text-align: left;
     color: #010101;
 }
 
-[data-vitrine] .product__comum .product__conditions {
+[data-vitrine] .product__comum .product__price .price__after .stores__offer {
+    margin: 0 auto;
+    align-self: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    border-radius: 11px;
+    background-color: #ffffff;
+    border: solid 1px #000000;
+}
+
+[data-vitrine] .product__comum .product__price .price__after .stores__offer a {
+    text-decoration: none;
+    color: initial;
+    width: 82px;
+    height: 22px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+[data-vitrine] .product__comum .product__price .price__after .stores__offer a:hover {
+    text-decoration: underline;
+}
+[data-vitrine] .product__comum .product__price .product__conditions {
     font-size: .85em;
     font-weight: normal;
     font-style: normal;
@@ -978,10 +1052,14 @@ body {
     text-align: left;
     color: rgba(0, 0, 0, 0.7);
     margin-bottom: 13px;
-    height: 26px;
+    height: 14px;
 }
 
-[data-vitrine] .product__comum .product__cta {
+[data-vitrine] .product__comum .product__price .content__action {
+    width: 100%;
+}
+
+[data-vitrine] .product__comum .product__price .product__cta {
     height: 40px;
     border-radius: 5px;
     background-color: #fff;
@@ -1424,15 +1502,18 @@ body {
 }
 
 [data-vitrine] .product__ebooks figure {
-    margin: 0 auto;
-    max-width: 200px;
-    max-height: 250px;
+    height: 270px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 [data-vitrine] .product__ebooks img {
-    margin: 10px auto;
+    padding: 10px 0px;
     width: auto;
-    height: 100%;
+    height: 250px;
+    object-fit: contain;
 }
 
 [data-vitrine] .product__ebooks .seal {

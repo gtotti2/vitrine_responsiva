@@ -63,11 +63,11 @@ var vitrineLoader = (lista, el) => {
         }
 
         function validateSale(sale) {
-            return sale > 0 ? '<span class="tagSale"> -' + sale + '% </span>' : ''
+            return sale > 0 ? `<span class="tagSale">${sale}%</span>` : ''
         }
 
         function validAuthors(authors, data) {
-            return (authors.length) ? authors.map((author, index) => `${author.name}<br />`).join('') : ""
+            return authors.length ? authors.map((author, index) => `${author.name}<br />`).join('') : ""
         }
 
         function funcRating(rating) {
@@ -116,7 +116,7 @@ var vitrineLoader = (lista, el) => {
             return ' R$ ' + sara.value_with_discount + '   <span class="vProduct-percentDiscount">(' + sara.discount_percent + '% de desconto)</span> no Cartão Saraiva';
         }
 
-        function validateOnSale(onSale) {
+        function validateOnSale(onSale, data) {
             return (onSale.length && onSale[0].category) ? `<div class="content__category"><img src="${onSale[0].category.url}" title="${onSale[0].category.text}"></div>` : `<div class="content__category"></div>`
         }
 
@@ -333,14 +333,32 @@ var vitrineLoader = (lista, el) => {
 
 
         var titleAndAuthor = (data) => {
-            var authors = data.authors
-            authorsName = authors.map(author => `
-            <h2 class="product__title">${doTruncarStr(data.name, 30)}</h2>
-            <h3 class="book__author">${doTruncarStr(author.name, 40)}</h3>
-            `) 
-            
-            onlyTitle = `<h2 class="product__title product__title--expanded">${doTruncarStr(data.name, 60)}</h2>`
-            return authors.length ? authorsName : onlyTitle
+            var authorsName = "";
+            var authors = data.authors.forEach((element, index) => {
+                authorsName += `${element.name} / `
+            });
+            var lastIndexBar = authorsName.lastIndexOf('/')
+
+            var titleAuthor = `
+                <h2 class="product__title">${doTruncarStr(data.name, 30)}</h2>
+                <h3 class="book__author">${doTruncarStr(authorsName.slice(0, lastIndexBar), 40)}</h3>
+            `
+            var titleExpanded = `
+                <h2 class="product__title product__title--expanded">${doTruncarStr(data.name, 60)}</h2>
+            `
+            return data.authors.length ? titleAuthor : titleExpanded
+        }
+
+        var selledBy = (data) => {
+            const apiUrl = 'https://api.saraiva.com.br/';
+            // $.ajax({
+            //     url: `${apiUrl}`,
+            //     dataType: 'json',
+            //     async: true,
+            //     success: function (response) {
+            //     }
+            // })
+            return "Vendido por Saraiva"
         }
 
 
@@ -391,7 +409,7 @@ var vitrineLoader = (lista, el) => {
             '</div>' +
             '</div>' +
             '</div>' +
-            validateOnSale(showcaseProducts.on_sale) +
+            validateOnSale(showcaseProducts.on_sale, showcaseProducts) +
             '<div class="content__saraiva-card">' +
             '<i></i>' +
             '<span class="saraiva-card__info">' + validSaraiva(showcaseProducts.price_block.saraiva_card) + '</span>' +
@@ -404,29 +422,37 @@ var vitrineLoader = (lista, el) => {
 
         htmlShowcase = `
         <div class="product__comum" data-sku="${showcaseProducts.sku}" data-track="true" data-track-list="${productObj.list}"data-track-name="${productObj.name}" data-track-id="${productObj.id}" data-track-price="${productObj.price}" data-track-brand="${productObj.brand}"  data-track-category="${productObj.category}" data-track-variant="${productObj.variant}" data-track-position="${productObj.position}" data-track-vitrine="${productObj.vitrine}">
-            <a href="${showcaseProducts.url}" class="box__product">
-                <div class="product__pic">
-                    <figure>
-                        <img src="${fixImageUrl(showcaseProducts)}" alt="${showcaseProducts.name}">
-                        ${validateSale(showcaseProducts.price_block.price.discount_percent)}
-                    </figure>
-                    <div class="product__seal">${validateOnSale(showcaseProducts.on_sale)}</div>
-                </div>
-                <div class="product__info">
-                    <div class="product__status">${validPre(showcaseProducts.presale)}</div>
-                    ${titleAndAuthor(showcaseProducts)}
-                    <div class="product__rating">${ratingPerCent(showcaseProducts.reviews_stars_width, showcaseProducts.reviews_count)}</div>
-                </div>
-                <div class="product__price">
-                    <div class="price__before">${validPrace(showcaseProducts.price_block.price)}</div>
-                    <div class="price__after">R$ ${showcaseProducts.price_block.credit_card.value_with_discount}</div>
-                    <div class="product__conditions">${validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price)}</div>
-                    <div class="product__cta content__action">
-                        <button type="button" title="Comprar" class="classBtnDefault" data-sku="${showcaseProducts.sku}" id="btn-cart"></button>
+            <div class="box__product" data-href="${showcaseProducts.url}">
+                    <div class="product__pic">
+                        <div class="seal ${showDigitalSeal(showcaseProducts.digital)}"></div>
+                        <figure>
+                                <a href="${showcaseProducts.url}"><img src="${fixImageUrl(showcaseProducts)}" alt="${showcaseProducts.name}"/></a>
+                                ${validateSale(showcaseProducts.price_block.price.discount_percent)}
+                        </figure>
+                        <div class="product__seal">${validateOnSale(showcaseProducts.on_sale)}</div>
                     </div>
-                </div>
-            </a>
+                    <div class="product__info">
+                        <div class="product__status">${validPre(showcaseProducts.presale)}</div>
+                            ${titleAndAuthor(showcaseProducts)}
+                            <div class="product__rating">${ratingPerCent(showcaseProducts.reviews_stars_width, showcaseProducts.reviews_count)}</div>
+                            <div class="product__seller">${selledBy(showcaseProducts)}</div>
+                        </div>
+                    <div class="product__price">
+                        <div class="price__before">${validPrace(showcaseProducts.price_block.price)}</div>
+                        <div class="price__after">
+                            <div class="price">R$ ${showcaseProducts.price_block.credit_card.value_with_discount}</div>
+                            <div class="stores__offer">
+                                <a href="#">+ 5 ofertas</a>
+                            </div>
+                        </div>
+                        <div class="product__conditions">${validacaoParcelamento(showcaseProducts.price_block.credit_card, showcaseProducts.price_block.price)}</div>
+                        <div class="content__action"><button type="button" title="Comprar" class="${classBtnDefault}" data-sku="${showcaseProducts.sku}" id="btn-cart">Adicionar ao Carrinho</button></div>
+                    </div>
+                </a>
+            </div>
         </div>`
+
+
 
         htmlShowcaseEstante =
             '<div class="product__estante" data-track="true" data-track-list="' + productObj.list + '"data-track-name="' + productObj.name + '" data-track-id="' + productObj.id + '" data-track-price="' + productObj.price + '" data-track-brand="' + productObj.brand + '"  data-track-category="' + productObj.category + '" data-track-variant="' + productObj.variant + '" data-track-position="' + productObj.position + '" data-track-vitrine="' + productObj.vitrine + '">' +

@@ -765,30 +765,29 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
     var callAjaxLento = () => {
 
-            $.when(
-                $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
-                    vitrineLoader(resposta, thisSlider)
-                    $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
-                })
-            ).then(function (data) {
-                var productsSkuListed = ""
-                var productsSku = data.products.map(function(product,index,array){
-                    index == array.length - 1 ?  productsSkuListed += `${product.sku}` : productsSkuListed += `${product.sku},`
-                })
-                $.get(`http://10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info) {
-                    info.forEach(element => {
-                        element.length && element[0].hasOwnProperty('store_name') ? $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por ${element[0].store_name}`) : $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por alguém`)
-                        //$(thisSlider).find(`[data-sku="${element[0].sku}"] .price`).text(`R$ ${element[0].price.final}`)
-                        $(thisSlider).find(`[data-sku]`).removeClass('loading')
-                    });
-                    //console.log()
-                    //info[0][0].others_stores != false ? element.qtd_ofertas = info[0][0].others_stores.qty : element.qtd_ofertas = 0
-                });
-                $.get(`https://api.saraiva.com.br/produto/urgencycards/${element.sku}=${element.rule_urgency}`, function (info) {
-                    //console.log(info)
-                    //info[element.sku] ? element.rule_urgency = info[element.sku] : element.rule_urgency = 0;
-                });
+        $.when(
+            $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
+                vitrineLoader(resposta, thisSlider)
+                $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
             })
+        ).then(function (data) {
+            var productsSkuListed = ""
+            var productsSku = data.products.map(function (product, index, array) {
+                index == array.length - 1 ? productsSkuListed += `${product.sku}` : productsSkuListed += `${product.sku},`
+            })
+            $.get(`http://10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info) {
+                info.forEach(element => {
+
+                    element.length && element[0].hasOwnProperty('store_name') ? $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por ${element[0].store_name}`) : $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por alguém`)
+                    //$(thisSlider).find(`[data-sku="${element[0].sku}"] .price`).text(`R$ ${element[0].price.final}`)
+                    $(thisSlider).find(`[data-sku]`).removeClass('loading')
+                });
+                //info[0][0].others_stores != false ? element.qtd_ofertas = info[0][0].others_stores.qty : element.qtd_ofertas = 0
+            });
+            $.get(`https://api.saraiva.com.br/produto/urgencycards/${element.sku}=${element.rule_urgency}`, function (info) {
+                //info[element.sku] ? element.rule_urgency = info[element.sku] : element.rule_urgency = 0;
+            });
+        })
 
 
 
@@ -798,7 +797,11 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
     if (slicked) {
         $(thisSlider).fadeOut('fast', function () {
             $(this).slick('unslick').children().remove().promise().done(function () {
-                callAjax()
+                if ($(thisSlider).hasClass('comum')) {
+                    callAjaxLento()
+                } else {
+                    callAjax()
+                }
             })
         })
     } else {

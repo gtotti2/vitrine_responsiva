@@ -878,9 +878,15 @@ body {
 [data-vitrine] .product__comum.nova {
     margin: 10px 0;
     max-width: 265px;
-    border: 0px solid #f0f3f6;
-    border-right: 2px solid #f0f3f6;
+    border: 0px;
+    margin-right: 2px;
 }
+[data-vitrine].border__default .product__comum.nova {
+    border-right: 2px solid #f0f3f6;
+    margin-right: 0px;
+}
+
+
 
 [data-vitrine] .product__comum.nova:hover {
     box-shadow: 0 2px 10px 0px rgba(140, 155, 164, 0.25);

@@ -620,8 +620,8 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
             })
         ).then(function (data) {
             var productsSkuListed = ""
-            data.products.map((produto, index, array) => {
-                index == array.length - 1 ? productsSkuListed += `${produto.sku}` : productsSkuListed += `${produto.sku},`
+            data.products.forEach((produto, index, array) => {
+                array != false && index == data.products.length - 1 ? productsSkuListed += `${produto.sku}` : productsSkuListed += `${produto.sku},`
                 if (produto.rule_urgency) {
                     $.get(`https://api.saraiva.com.br/produto/urgencycards/${produto.sku}=${produto.rule_urgency}`, function (info) {
                         const urgencyRule = info[produto.sku]

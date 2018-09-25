@@ -126,171 +126,15 @@ var vitrineLoader = (lista, el) => {
                 dataType: 'json',
                 async: true,
                 success: function (response) {
-                    const urgencyRule = response[data.sku]
-                    if (urgencyRule) {
-                        urgencyOptions = {
-                            remainingTime: urgencyRule.missing_time,
-                            remainingItems: urgencyRule.remaining_quantity,
-                            description: urgencyRule.description,
-                            showTimer: urgencyRule.show_timer,
-                            showItems: urgencyRule.show_counter,
-                            toggle: true
-                        }
-                        function urgencyCounter(options) {
-                            // options details
-                            const remainingTime = options.remainingTime;
-                            const remainingItems = options.remainingItems;
-                            const description = options.description;
-                            const showTimer = options.showTimer;
-                            const showItems = options.showItems;
-                            const toggle = options.toggle;
 
-                            // svg defaults 
-                            const svgns = "http://www.w3.org/2000/svg";
-                            const xlinkns = "http://www.w3.org/1999/xlink";
-
-                            // create html
-                            const urgency = document.createElement('div');
-                            const urgencyLead = document.createElement('span');
-                            const urgencyIcon = document.createElement('i');
-                            const urgencyRemainingTime = document.createElement('span');
-                            const urgencyRemainingItems = document.createElement('span');
-                            const urgencyDescription = document.createElement('p');
-
-                            // add classes
-                            urgency.classList.add('urgency');
-
-                            // create icon clock
-                            urgencyIcon.classList.add('icon', 'icon-clock');
-                            urgencyIcon.setAttributeNS(xlinkns, 'href', '#icon-clock');
-
-
-                            // add classes
-                            urgencyRemainingTime.classList.add('urgency__remaining-time', 'active');
-                            urgencyRemainingItems.classList.add('urgency__remaining-items');
-
-                            // toggle remain and timer
-                            if (toggle) {
-                                urgency.classList.add('small');
-
-                                if (showTimer && showItems) {
-                                    urgencyRemainingItems.classList.add('hide');
-
-                                    const toggleContent = setInterval(function () {
-                                        urgencyLead.classList.toggle('hide');
-                                        urgencyIcon.classList.toggle('hide');
-                                        urgencyRemainingTime.classList.toggle('hide');
-                                        urgencyRemainingItems.classList.toggle('hide');
-                                    }, 3000);
-                                }
-                            }
-
-                            // create counter
-                            if (showTimer) {
-                                urgencyLead.textContent = 'Oferta';
-                                urgencyRemainingTime.textContent = '00:00:00';
-
-                                let changeTime = remainingTime;
-                                const createCounter = setInterval(function () {
-                                    let seconds = changeTime;
-
-                                    if (seconds > 59) {
-                                        seconds = seconds % 60;
-                                    }
-                                    if (seconds < 10) {
-                                        seconds = `0${seconds}`
-                                    }
-
-                                    let minutes = changeTime / 60;
-                                    minutes = minutes % 60;
-                                    minutes = Math.floor(minutes);
-
-                                    if (minutes < 10) {
-                                        minutes = `0${minutes}`
-                                    }
-
-                                    let hours = (changeTime / 60) / 60;
-                                    hours = Math.floor(hours);
-
-                                    if (hours < 10) {
-                                        hours = `0${hours}`
-                                    }
-
-                                    urgencyRemainingTime.textContent = `${hours}:${minutes}:${seconds}`;
-
-                                    changeTime--;
-                                    if (changeTime < 0) {
-                                        clearInterval(createCounter);
-                                        urgency.classList.add('urgency-timeout');
-
-                                        urgencyRemainingItems.textContent = 'Restam 0';
-                                        if (toggle) {
-                                            clearInterval(toggleContent);
-                                            urgencyLead.classList.remove('hide');
-                                            urgencyIcon.classList.remove('hide');
-                                            urgencyRemainingTime.classList.remove('hide');
-                                            urgencyRemainingItems.classList.add('hide');
-                                        }
-                                    }
-                                }, 1000);
-                            }
-                            else {
-                                urgency.classList.add('urgency--center');
-
-                                urgencyLead.classList.add('hide');
-                                urgencyIcon.classList.add('hide');
-                                urgencyRemainingTime.classList.add('hide');
-                            }
-
-                            if (showItems) {
-                                let remainText;
-                                if (remainingItems > 1) {
-                                    remainText = 'Restam '
-                                } else if (remainingItems < 1) {
-                                    remainText = 'Resta '
-                                    urgency.classList.add('esgotado')
-                                }
-
-                                urgencyRemainingItems.textContent = remainText + remainingItems;
-                            }
-                            else {
-                                urgency.classList.add('urgency--center');
-                                urgencyRemainingItems.classList.add('hide');
-                            }
-
-                            // join html
-                            urgency.appendChild(urgencyLead);
-                            urgency.appendChild(urgencyIcon);
-                            urgency.appendChild(urgencyRemainingTime);
-                            urgency.appendChild(urgencyRemainingItems);
-
-                            const urgencyWrap = document.createElement('div');
-                            urgencyWrap.classList.add('urgency__wrap');
-
-                            if (description && !toggle) {
-                                urgencyDescription.classList.add('urgency__helper');
-                                urgencyDescription.textContent = description;
-
-                                urgencyWrap.appendChild(urgencyDescription);
-                            }
-                            urgencyWrap.appendChild(urgency)
-                            return urgencyWrap
-                        }
-
-                        $(`.product__comum[data-sku="${sku}"]`).each(function (e) {
-                            var retorno = urgencyCounter(urgencyOptions)
-                            $(this).prepend(retorno)
-                        })
-
-                    }
                 }
             });
         }
 
-        timeUrgency(this, this.sku)
+
 
         var ratingPerCent = (rating, reviews_count) => {
-            return reviews_count ? `<div class="rating__grade"><div class="grade" style="width: ${rating}%;"></div></div><div class="product__reviews">(${reviews_count})</div>` : ``
+            return reviews_count ? `<div class="rating__grade"><div class="grade" style="width: ${rating}%;"></div></div><div class="product__reviews">(${reviews_count})</div>` : `<div class="rating__grade"><div class="grade" style="width: ${rating}%;"></div></div><div class="product__reviews product__reviews--eval">(Avalie agora)</div>`
         }
 
 
@@ -302,11 +146,11 @@ var vitrineLoader = (lista, el) => {
             var lastIndexBar = authorsName.lastIndexOf('/')
 
             var titleAuthor = `
-                <h2 class="product__title">${doTruncarStr(data.name, 25)}</h2>
-                <h3 class="book__author">${doTruncarStr(authorsName.slice(0, lastIndexBar), 40)}</h3>
+                <h3 class="product__title">${doTruncarStr(data.name, 47)}</h3>
+                <h4 class="book__author">${doTruncarStr(authorsName.slice(0, lastIndexBar), 30)}</h4>
             `
             var titleExpanded = `
-                <h2 class="product__title product__title--expanded">${doTruncarStr(data.name, 55)}</h2>
+                <h3 class="product__title product__title--expanded">${doTruncarStr(data.name, 50)}</h3>
             `
             return data.authors.length ? titleAuthor : titleExpanded
         }
@@ -382,16 +226,20 @@ var vitrineLoader = (lista, el) => {
                             </div>
                             <div class="product__info">
                                 <div class="product__status">${validPre(val.presale)}</div>
-                                    ${titleAndAuthor(val)}
+                                    <div class="product__title_author">
+                                        <a href="${val.url}" data-track="click">   
+                                            ${titleAndAuthor(val)}
+                                        </a>
+                                    </div>
                                     <div class="product__rating">${ratingPerCent(val.reviews_stars_width, val.reviews_count)}</div>
-                                    <div class="product__seller">Vendido por... </div>
+                                    <div class="product__seller">Vendido por Saraiva </div>
                                 </div>
                             <div class="product__price">
                                 <div class="price__before">${validPrace(val.price_block.price)}</div>
                                 <div class="price__after">
                                     <div class="price">R$ ${val.price_block.credit_card.value_with_discount}</div>
                                     <!--div class="stores__offer">
-                                        <a href="#">+ ${val.qtd_ofertas} ofertas</a>
+                                        <a href="${val.url}" data-track="click">+ <span>...</span> ofertas</a>
                                     </div-->
                                 </div>
                                 <div class="product__conditions">${validacaoParcelamento(val.price_block.credit_card, val.price_block.price)}</div>
@@ -772,21 +620,181 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
             })
         ).then(function (data) {
             var productsSkuListed = ""
-            var productsSku = data.products.map(function (product, index, array) {
-                index == array.length - 1 ? productsSkuListed += `${product.sku}` : productsSkuListed += `${product.sku},`
-            })
-            $.get(`http://10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info) {
-                info.forEach(element => {
+            data.products.map((produto, index, array) => {
+                index == array.length - 1 ? productsSkuListed += `${produto.sku}` : productsSkuListed += `${produto.sku},`
+                if (produto.rule_urgency) {
+                    $.get(`https://api.saraiva.com.br/produto/urgencycards/${produto.sku}=${produto.rule_urgency}`, function (info) {
+                        const urgencyRule = info[produto.sku]
+                        if (urgencyRule) {
+                            urgencyOptions = {
+                                remainingTime: urgencyRule.missing_time,
+                                remainingItems: urgencyRule.remaining_quantity,
+                                description: urgencyRule.description,
+                                showTimer: urgencyRule.show_timer,
+                                showItems: urgencyRule.show_counter,
+                                toggle: true
+                            }
+                            function urgencyCounter(options) {
+                                // options details
+                                const remainingTime = options.remainingTime;
+                                const remainingItems = options.remainingItems;
+                                const description = options.description;
+                                const showTimer = options.showTimer;
+                                const showItems = options.showItems;
+                                const toggle = options.toggle;
 
-                    element.length && element[0].hasOwnProperty('store_name') ? $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por ${element[0].store_name}`) : $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por alguém`)
-                    //$(thisSlider).find(`[data-sku="${element[0].sku}"] .price`).text(`R$ ${element[0].price.final}`)
-                    $(thisSlider).find(`[data-sku]`).removeClass('loading')
-                });
-                //info[0][0].others_stores != false ? element.qtd_ofertas = info[0][0].others_stores.qty : element.qtd_ofertas = 0
+                                // svg defaults 
+                                const svgns = "http://www.w3.org/2000/svg";
+                                const xlinkns = "http://www.w3.org/1999/xlink";
+
+                                // create html
+                                const urgency = document.createElement('div');
+                                const urgencyLead = document.createElement('span');
+                                const urgencyIcon = document.createElement('i');
+                                const urgencyRemainingTime = document.createElement('span');
+                                const urgencyRemainingItems = document.createElement('span');
+                                const urgencyDescription = document.createElement('p');
+
+                                // add classes
+                                urgency.classList.add('urgency');
+
+                                // create icon clock
+                                urgencyIcon.classList.add('icon', 'icon-clock');
+                                urgencyIcon.setAttributeNS(xlinkns, 'href', '#icon-clock');
+
+
+                                // add classes
+                                urgencyRemainingTime.classList.add('urgency__remaining-time', 'active');
+                                urgencyRemainingItems.classList.add('urgency__remaining-items');
+
+                                // toggle remain and timer
+                                if (toggle) {
+                                    urgency.classList.add('small');
+
+                                    if (showTimer && showItems) {
+                                        urgencyRemainingItems.classList.add('hide');
+
+                                        const toggleContent = setInterval(function () {
+                                            urgencyLead.classList.toggle('hide');
+                                            urgencyIcon.classList.toggle('hide');
+                                            urgencyRemainingTime.classList.toggle('hide');
+                                            urgencyRemainingItems.classList.toggle('hide');
+                                        }, 3000);
+                                    }
+                                }
+
+                                // create counter
+                                if (showTimer) {
+                                    urgencyLead.textContent = 'Oferta';
+                                    urgencyRemainingTime.textContent = '00:00:00';
+
+                                    let changeTime = remainingTime;
+                                    const createCounter = setInterval(function () {
+                                        let seconds = changeTime;
+
+                                        if (seconds > 59) {
+                                            seconds = seconds % 60;
+                                        }
+                                        if (seconds < 10) {
+                                            seconds = `0${seconds}`
+                                        }
+
+                                        let minutes = changeTime / 60;
+                                        minutes = minutes % 60;
+                                        minutes = Math.floor(minutes);
+
+                                        if (minutes < 10) {
+                                            minutes = `0${minutes}`
+                                        }
+
+                                        let hours = (changeTime / 60) / 60;
+                                        hours = Math.floor(hours);
+
+                                        if (hours < 10) {
+                                            hours = `0${hours}`
+                                        }
+
+                                        urgencyRemainingTime.textContent = `${hours}:${minutes}:${seconds}`;
+
+                                        changeTime--;
+                                        if (changeTime < 0) {
+                                            clearInterval(createCounter);
+                                            urgency.classList.add('urgency-timeout');
+
+                                            urgencyRemainingItems.textContent = 'Restam 0';
+                                            if (toggle) {
+                                                clearInterval(toggleContent);
+                                                urgencyLead.classList.remove('hide');
+                                                urgencyIcon.classList.remove('hide');
+                                                urgencyRemainingTime.classList.remove('hide');
+                                                urgencyRemainingItems.classList.add('hide');
+                                            }
+                                        }
+                                    }, 1000);
+                                }
+                                else {
+                                    urgency.classList.add('urgency--center');
+
+                                    urgencyLead.classList.add('hide');
+                                    urgencyIcon.classList.add('hide');
+                                    urgencyRemainingTime.classList.add('hide');
+                                }
+
+                                if (showItems) {
+                                    let remainText;
+                                    if (remainingItems > 1) {
+                                        remainText = 'Restam '
+                                    } else if (remainingItems < 1) {
+                                        remainText = 'Resta '
+                                        urgency.classList.add('esgotado')
+                                    }
+
+                                    urgencyRemainingItems.textContent = remainText + remainingItems;
+                                }
+                                else {
+                                    urgency.classList.add('urgency--center');
+                                    urgencyRemainingItems.classList.add('hide');
+                                }
+
+                                // join html
+                                urgency.appendChild(urgencyLead);
+                                urgency.appendChild(urgencyIcon);
+                                urgency.appendChild(urgencyRemainingTime);
+                                urgency.appendChild(urgencyRemainingItems);
+
+                                const urgencyWrap = document.createElement('div');
+                                urgencyWrap.classList.add('urgency__wrap');
+
+                                if (description && !toggle) {
+                                    urgencyDescription.classList.add('urgency__helper');
+                                    urgencyDescription.textContent = description;
+
+                                    urgencyWrap.appendChild(urgencyDescription);
+                                }
+                                urgencyWrap.appendChild(urgency)
+                                return urgencyWrap
+                            }
+                            $(`.product__comum[data-sku="${produto.sku}"]`).each(function (e) {
+                                var retorno = urgencyCounter(urgencyOptions)
+                                $(this).prepend(retorno)
+                            })
+
+                        }
+                    });
+                }
             });
-            $.get(`https://api.saraiva.com.br/produto/urgencycards/${element.sku}=${element.rule_urgency}`, function (info) {
-                //info[element.sku] ? element.rule_urgency = info[element.sku] : element.rule_urgency = 0;
-            });
+
+
+            // $.get(`//10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info, index) {
+            //     info.forEach((element, index) => {
+            //         element.length && element[0].hasOwnProperty('store_name') ? $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por ${element[0].store_name}`) : $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por Saraiva`)
+            //         $(thisSlider).find(`.nova[data-sku="${element[0].sku}"] .price`).text(`R$ ${element[0].price.final}`)
+            //         $(thisSlider).find(`.nova[data-sku="${element[0].sku}"] .stores__offer a`).text(`+ ${element[0].others_stores.qty} ofertas `)
+            //     });
+            //     //info[0][0].others_stores != false ? element.qtd_ofertas = info[0][0].others_stores.qty : element.qtd_ofertas = 0
+            // });
+
+            $(thisSlider).find(`[data-sku]`).removeClass('loading')
         })
 
 

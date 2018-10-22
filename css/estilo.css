@@ -874,7 +874,6 @@ body {
     border: 2px solid #f0f3f6;
     display: flex;
 }
-
 [data-vitrine] .product__comum.nova {
     margin: 10px 0;
     max-width: 265px;

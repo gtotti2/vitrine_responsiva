@@ -615,6 +615,7 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
         $.when(
             $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
+                console.log(resposta)
                 vitrineLoader(resposta, thisSlider)
                 $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
             })
@@ -796,10 +797,6 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
             $(thisSlider).find(`[data-sku]`).removeClass('loading')
         })
-
-
-
-
     }
 
     if (slicked) {

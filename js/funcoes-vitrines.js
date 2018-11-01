@@ -214,45 +214,45 @@ var vitrineLoader = (lista, el) => {
             </div>
         </div>`
 
-        htmlShowcase = `<div class="product__comum nova loading" data-sku="${val.sku}" data-track="true" data-track-list="${val.list}"data-track-name="${val.name}" data-track-id="${val.id}" data-track-price="${val.price}" data-track-brand="${val.brand}"  data-track-category="${val.category}" data-track-variant="${val.variant}" data-track-position="${val.position}" data-track-vitrine="${val.vitrine}">
-                    <div class="box__product" data-href="${val.url}">
-                            <div class="product__pic">
-                                <div class="seal ${showDigitalSeal(val.digital)}"></div>
-                                <figure>
-                                        <a href="${val.url}"><img src="${fixImageUrl(val)}" alt="${val.name}"/></a>
-                                        ${validateSale(val.price_block.price.discount_percent)}
-                                </figure>
-                                <div class="product__seal">${validateOnSale(val.on_sale)}</div>
-                            </div>
-                            <div class="product__info">
-                                <div class="product__status">${validPre(val.presale)}</div>
-                                    <div class="product__title_author">
-                                        <a href="${val.url}" data-track="click">   
-                                            ${titleAndAuthor(val)}
-                                        </a>
-                                    </div>
-                                    <div class="product__rating">${ratingPerCent(val.reviews_stars_width, val.reviews_count)}</div>
-                                    <div class="product__seller">Vendido por Saraiva </div>
-                                </div>
-                            <div class="product__price">
-                                <div class="price__before">${validPrace(val.price_block.price)}</div>
-                                <div class="price__after">
-                                    <div class="price">R$ ${val.price_block.credit_card.value_with_discount}</div>
-                                    <!--div class="stores__offer">
-                                        <a href="${val.url}" data-track="click">+ <span>...</span> ofertas</a>
-                                    </div-->
-                                </div>
-                                <div class="product__conditions">${validacaoParcelamento(val.price_block.credit_card, val.price_block.price)}</div>
-                                <div class="content__action"><button type="button" title="Comprar" class="${classBtnDefault}" data-sku="${val.sku}" id="btn-cart">Adicionar ao Carrinho</button></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </div>`
+        // htmlShowcase = `<div class="product__comum nova loading" data-sku="${val.sku}" data-track="true" data-track-list="${val.list}"data-track-name="${val.name}" data-track-id="${val.id}" data-track-price="${val.price}" data-track-brand="${val.brand}"  data-track-category="${val.category}" data-track-variant="${val.variant}" data-track-position="${val.position}" data-track-vitrine="${val.vitrine}">
+        //             <div class="box__product" data-href="${val.url}">
+        //                     <div class="product__pic">
+        //                         <div class="seal ${showDigitalSeal(val.digital)}"></div>
+        //                         <figure>
+        //                                 <a href="${val.url}"><img src="${fixImageUrl(val)}" alt="${val.name}"/></a>
+        //                                 ${validateSale(val.price_block.price.discount_percent)}
+        //                         </figure>
+        //                         <div class="product__seal">${validateOnSale(val.on_sale)}</div>
+        //                     </div>
+        //                     <div class="product__info">
+        //                         <div class="product__status">${validPre(val.presale)}</div>
+        //                             <div class="product__title_author">
+        //                                 <a href="${val.url}" data-track="click">   
+        //                                     ${titleAndAuthor(val)}
+        //                                 </a>
+        //                             </div>
+        //                             <div class="product__rating">${ratingPerCent(val.reviews_stars_width, val.reviews_count)}</div>
+        //                             <div class="product__seller">Vendido por Saraiva </div>
+        //                         </div>
+        //                     <div class="product__price">
+        //                         <div class="price__before">${validPrace(val.price_block.price)}</div>
+        //                         <div class="price__after">
+        //                             <div class="price">R$ ${val.price_block.credit_card.value_with_discount}</div>
+        //                             <!--div class="stores__offer">
+        //                                 <a href="${val.url}" data-track="click">+ <span>...</span> ofertas</a>
+        //                             </div-->
+        //                         </div>
+        //                         <div class="product__conditions">${validacaoParcelamento(val.price_block.credit_card, val.price_block.price)}</div>
+        //                         <div class="content__action"><button type="button" title="Comprar" class="${classBtnDefault}" data-sku="${val.sku}" id="btn-cart">Adicionar ao Carrinho</button></div>
+        //                     </div>
+        //                 </a>
+        //             </div>
+        //             <div class="spinner">
+        //                 <div class="bounce1"></div>
+        //                 <div class="bounce2"></div>
+        //                 <div class="bounce3"></div>
+        //             </div>
+        //         </div>`
 
 
 
@@ -317,7 +317,7 @@ var vitrineLoader = (lista, el) => {
 
         $(el).append(htmlShowcase)
 
-        tipoVitrine == "estante" && $(window).width() >= 1024 && index == lista.length - 1 ? $(el).append($(`<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/${$(el).data('vitrine').link}">ver todos os produtos</a></div>`)) : null
+        tipoVitrine == "estante" && index == lista.products.length - 1 ? $(el).append($(`<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/${$(el).data('vitrine').link}">ver todos os produtos</a></div>`)) : null
 
 
     });
@@ -615,7 +615,6 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
         $.when(
             $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
-                console.log(resposta)
                 vitrineLoader(resposta, thisSlider)
                 $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
             })

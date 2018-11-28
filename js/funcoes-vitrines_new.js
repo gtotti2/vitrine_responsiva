@@ -783,6 +783,58 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
                     });
                 }
             });
+            var arrayListed = []
+            $('.product__comum.nova').each((index, element) => {
+                arrayListed[index] = $(element).data('sku');
+            })
+            $.ajax({
+                url: `https://preco.saraiva.com.br/v3/buyBox/produto/${arrayListed.join(',')}`,
+                dataType: 'json',
+                success: function (info) {
+                    const estruturaPrice = (index) => {
+                        return `
+                        <div class="product__price">
+                            <div class="price__before">R$ ${info[index][0].price.final < info[index][0].price.nominal ? `${info[index][0].price.nominal}` : ""}</div>
+                            <div class="price__after">
+                                <div class="price">R$ ${info[index][0].price.final}</div>
+                                ${info[index][0].others_stores.qty > 0 ? `<div class="stores__offer"><a href="-${info[index][0].sku}" data-track="click">+ <span>...</span> ofertas</a></div>`:""}
+                            </div>
+                            <div class="product__conditions">${info[index][0].price.has_special_price > 0 ? `em até ${info[index][0].credit_card.qty_installments_with_discount} x no crédito ou em até ${info[index][0].price.qty_installments_without_fee}x de R$ ${info[index][0].price.value_installments_without_fee} sem juros` : `em até ${info[index][0].price.qty_installments_without_fee } x sem juros`}</div>
+                            <div class="content__action"><button type="button" title="Comprar" class="add-cart check-services btn-secondary btn-full icon icon-carrinho icon-btn" data-sku="3710206" id="btn-cart" tabindex="0">Adicionar ao Carrinho</button></div>
+                        </div>`
+                    } 
+                    const changeInfo = (element, index) => {
+
+                        $(element).find('.product__pic img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${info[index][0].sku}&qld=90&l=300&a=-1&MktpIn=true&Lojista=${info[index][0].fil_id}`)
+                        $(element).find('.product__seller').text(`Vendido por ${info[index][0].store_name}`)
+                        $(element).find('.product__price').replaceWith(estruturaPrice(index))
+                    }
+                    const changePrice = (element, index) => {
+                        $(element).find('.product__seller').text(`Vendido por ${info[index][0].store_name}`)
+                        $(element).find('.product__price').replaceWith(estruturaPrice(index))
+                    }
+                    $('.product__comum.nova').each((index, element) => {
+                        info[index][0].fil_id != 16 ? changeInfo(element, index) : changePrice(element, index)
+                    })
+
+                    //console.log(info)
+                    // info.forEach((element,index) => {
+                    //     console.log(element)
+                    // });
+                    // skuInfo = info[0][0]
+                    // var estrutura = `<div class="product__price">
+                    //                     <div class="price">${skuInfo.price.nominal <= skuInfo.price.final ? `Por <span>R$ ${skuInfo.price.final}</span>` : `De: R$ ${skuInfo.price.nominal} por <span>R$ ${skuInfo.price.final}</span>`}</div>
+                    //                     <div class="price__installments">em <span>${skuInfo.price.qty_installments_with_fee}x de ${skuInfo.price.total_value_installments_with_fee}</span> ${skuInfo.price.discount_percent > 0 ? `<span>(${skuInfo.price.discount_percent}%)</span>` : ""}</div>
+                    //                 </div>`
+                    // var vendidoPor = `<b>${skuInfo.store_name}</b>`
+                    // $(element).find('.product__price').replaceWith(estrutura)
+                    // $(element).find('.product__seller b').replaceWith(vendidoPor)
+                    // skuInfo.fil_id == 16 || skuInfo.fil_id == 1 ? "" : $(element).find('.product__image img').replaceWith(`<img class="img-fluid" src="https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${skuInfo.sku}&qld=90&l=250&a=-1&MktpIn=true&Lojista=${skuInfo.fil_id}">`)
+                },
+                error: function (msg) {
+                    console.log(msg)
+                }
+            })
 
 
             // $.get(`//10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info, index) {
@@ -802,6 +854,7 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
         $(thisSlider).fadeOut('fast', function () {
             $(this).slick('unslick').children().remove().promise().done(function () {
                 if ($(thisSlider).hasClass('comum')) {
+                    console.log('oi')
                     callAjaxLento()
                 } else {
                     callAjax()

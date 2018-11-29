@@ -606,7 +606,7 @@
 
 [data-vitrine] .product__estante {
     position: relative;
-    margin: 0 10px;
+    margin: 0 5px;
     outline: transparent;
     height: auto;
 }
@@ -750,7 +750,7 @@
 }
 
 [data-vitrine] .product__estante--cta-ver-todos {
-    margin: 10px auto 0;
+    margin: 10px 0px 0px 5px;
     display: table;
     border: 1px solid #1d6dff;
     border-radius: 5px;

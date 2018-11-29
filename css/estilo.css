@@ -924,6 +924,20 @@
 
 [data-vitrine] .product__comum .product__pic .seal.digital:before {
     content: 'e-book';
+    padding: 6px 14px;
+    margin: 0px auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 70px;
+    border-radius: 5px;
+    background-color: #1d6dff;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+/*     
+    content: 'e-book';
     padding: 7px 14px 8px;
     margin: 0px auto;
     top: 0;
@@ -939,7 +953,7 @@
     font-size: 1em;
     font-weight: 600;
     font-style: normal;
-    font-stretch: normal;
+    font-stretch: normal; */
 }
 
 [data-vitrine] .product__comum .product__pic figure {
@@ -982,7 +996,7 @@
 
 [data-vitrine] .product__comum .product__pic figure img {
     margin-top: 19px;
-    height: 185px;
+    height: 171px;
     width: 100%;
     object-fit: contain;
     position: relative;

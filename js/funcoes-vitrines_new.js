@@ -1,7 +1,22 @@
 var $ = jQuery;
 
 
-var vitrineLoader = (lista, el) => {
+function validacaoParcelamento(parce1, parce2) {
+    if (parce1.value_with_discount === parce2.nominal) {
+        return '';
+    } else if (parce1.value_with_discount === parce2.value_installments_without_fee) {
+        return `em até ${parce1.qty_installments_with_discount}x no crédito`;
+    } else if (parce1.has_discount !== 0 && parce2.value_installments_without_fee == 0) {
+        return `em até ${parce1.qty_installments_with_discount}x no crédito`;
+    }
+    return `em ${parce1.qty_installments_with_discount}x no crédito <br /> ou em até ${parce2.qty_installments_without_fee}x de R$ ${parce2.value_installments_without_fee} `;
+}
+
+function validPrace(por) {
+    return `R$ ${por.nominal}`
+}
+
+var vitrineLoader = (lista, el,urlbutton) => {
 
     var tipoVitrine = $(el).data('vitrine').tipo;
     var productsList = [];
@@ -42,9 +57,11 @@ var vitrineLoader = (lista, el) => {
         }
 
         function fixImageUrl(productInfo) {
+            //console.log(productInfo)
+            
             let valueSplitted = productInfo.image.split(".")
-            let conditions = productInfo.type_id == "grouped" && valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg"
-            return conditions ? productInfo.image : productInfo.image + "300&a=-1"
+            let conditions = productInfo.type_id == "grouped" &&  valueSplitted[valueSplitted.length - 1] == "png" || valueSplitted[valueSplitted.length - 1] == "jpg" || valueSplitted[valueSplitted.length - 1] == "jpeg"
+            return productInfo.sku.search(/[a-zA-Z]/) ? conditions ? productInfo.image : productInfo.image + "300&a=-1" : ""
         }
 
         function doTruncarStr(str, size) {
@@ -80,6 +97,7 @@ var vitrineLoader = (lista, el) => {
         }
 
         function validPrace(por) {
+            //console.log(`R$ ${por.nominal}`)
             return por.nominal === por.final ? '' : `R$ ${por.nominal}`
         }
 
@@ -257,7 +275,7 @@ var vitrineLoader = (lista, el) => {
 
 
         htmlShowcaseEstante =
-            `<div class="product__estante" data-track="true" data-track-list="${val.list}"data-track-name="${val.name}" data-track-id="${val.id}" data-track-price="${val.price}" data-track-brand="${val.brand}"  data-track-category="${val.category}" data-track-variant="${val.variant}" data-track-position="${val.position}" data-track-vitrine="${val.vitrine}">
+            `<div class="product__estante" data-track="true" data-sku="${val.sku}" data-track-list="${val.list}" data-track-name="${val.name}" data-track-id="${val.id}" data-track-price="${val.price}" data-track-brand="${val.brand}"  data-track-category="${val.category}" data-track-variant="${val.variant}" data-track-position="${val.position}" data-track-vitrine="${val.vitrine}">
                 <a href="${val.url}" data-track="click">
                     <figure>
                         <div class="seal ${showDigitalSeal(val.digital)}"></div>
@@ -267,7 +285,7 @@ var vitrineLoader = (lista, el) => {
                                 <div class="price-group">
                                     <div class="preorder">${validPre(val.presale)}</div>
                                     <div class="price">${validPrace(val.price_block.price)}</div>
-                                    <div class="special-price">R$ ${ val.price_block.credit_card.value_with_discount}</div>
+                                    <div class="special-price">R$ ${val.price_block.credit_card.value_with_discount}</div>
                                     <div class="discount-cc">${validacaoParcelamento(val.price_block.credit_card, val.price_block.price)}</div>
                                 </div>
                             </div>
@@ -316,8 +334,7 @@ var vitrineLoader = (lista, el) => {
         tipoVitrine == "comum" ? htmlShowcase : tipoVitrine == "aspiracional" ? htmlShowcase = htmlShowCaseAspirational : tipoVitrine == "ebooks" ? htmlShowcase = htmlShowcaseEbooks : tipoVitrine == "mural" ? htmlShowcase = htmlShowcaseMural : tipoVitrine == "classicos" ? htmlShowcase = htmlShowcaseClassicos : htmlShowcase = htmlShowcaseEstante
 
         $(el).append(htmlShowcase)
-
-        tipoVitrine == "estante" && index == lista.products.length - 1 ? $(el).append($(`<div class="product__estante product__estante--cta-ver-todos"><a href="https://www.saraiva.com.br/${$(el).data('vitrine').link}">ver todos os produtos</a></div>`)) : null
+        tipoVitrine == "estante" && index == lista.products.length - 1 ? $(el).append($(`<div data-button-vitrine class="product__estante--cta-ver-todos"><a href="${urlbutton == undefined ? `https://www.saraiva.com.br/${$(el).data('vitrine').link}` : urlbutton}">ver todos os produtos</a></div>`)) : null
 
 
     });
@@ -560,7 +577,7 @@ var dataTrack = (element) => {
 }
 
 
-var slickLoadAjax = (thisSlider, id_vitrine) => {
+var slickLoadAjax = (thisSlider, id_vitrine,urlbutton) => {
     var data = $(thisSlider).data("vitrine"),
         responsivo = $(thisSlider).data("responsivo"),
         slickOptions = $(thisSlider).data("slick-options"),
@@ -606,7 +623,7 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
         $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
 
         }).then(function (resposta) {
-            vitrineLoader(resposta, thisSlider)
+            vitrineLoader(resposta, thisSlider,urlbutton)
             $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
         });
     }
@@ -615,7 +632,7 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
 
         $.when(
             $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
-                vitrineLoader(resposta, thisSlider)
+                vitrineLoader(resposta, thisSlider,urlbutton)
                 $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active')
             })
         ).then(function (data) {
@@ -794,17 +811,16 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
                     const estruturaPrice = (index) => {
                         return `
                         <div class="product__price">
-                            <div class="price__before">R$ ${info[index][0].price.final < info[index][0].price.nominal ? `${info[index][0].price.nominal}` : ""}</div>
+                            <div class="price__before">${info[index][0].price.final === info[index][0].price.nominal ? "" : `R$ ${info[index][0].price.nominal}`}</div>
                             <div class="price__after">
                                 <div class="price">R$ ${info[index][0].price.final}</div>
-                                ${info[index][0].others_stores.qty > 0 ? `<div class="stores__offer"><a href="-${info[index][0].sku}" data-track="click">+ <span>...</span> ofertas</a></div>`:""}
+                                ${info[index][0].others_stores.qty > 0 ? `<div class="stores__offer"><a href="-${info[index][0].sku}" data-track="click">+ <span>...</span> ofertas</a></div>` : ""}
                             </div>
-                            <div class="product__conditions">${info[index][0].price.has_special_price > 0 ? `em até ${info[index][0].credit_card.qty_installments_with_discount} x no crédito ou em até ${info[index][0].price.qty_installments_without_fee}x de R$ ${info[index][0].price.value_installments_without_fee} sem juros` : `em até ${info[index][0].price.qty_installments_without_fee } x sem juros`}</div>
+                            <div class="product__conditions">${info[index][0].price.has_special_price > 0 ? `em até ${info[index][0].credit_card.qty_installments_with_discount} x no crédito ou em até ${info[index][0].price.qty_installments_without_fee}x de R$ ${info[index][0].price.value_installments_without_fee} sem juros` : `em até ${info[index][0].price.qty_installments_without_fee} x sem juros`}</div>
                             <div class="content__action"><button type="button" title="Comprar" class="add-cart check-services btn-secondary btn-full icon icon-carrinho icon-btn" data-sku="3710206" id="btn-cart" tabindex="0">Adicionar ao Carrinho</button></div>
                         </div>`
-                    } 
+                    }
                     const changeInfo = (element, index) => {
-
                         $(element).find('.product__pic img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${info[index][0].sku}&qld=90&l=300&a=-1&MktpIn=true&Lojista=${info[index][0].fil_id}`)
                         $(element).find('.product__seller').text(`Vendido por ${info[index][0].store_name}`)
                         $(element).find('.product__price').replaceWith(estruturaPrice(index))
@@ -814,8 +830,9 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
                         $(element).find('.product__price').replaceWith(estruturaPrice(index))
                     }
                     $('.product__comum.nova').each((index, element) => {
-                        info[index][0].fil_id != 16 ? changeInfo(element, index) : changePrice(element, index)
+                        info[index] != undefined ? info[index][0].fil_id != 16 ? changeInfo(element, index) : changePrice(element, index) : ""
                     })
+
 
                     //console.log(info)
                     // info.forEach((element,index) => {
@@ -837,6 +854,53 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
             })
 
 
+            var arrayProdutosEstante = []
+            $('.product__estante').each((index, element) => {
+                arrayProdutosEstante[index] = $(element).data('sku')
+            })
+            $.ajax({
+                url: `https://preco.saraiva.com.br/v3/buyBox/produto/${arrayProdutosEstante.join(',')}`,
+                dataType: 'json',
+                success: function (info) {
+                    // var estrutura = `
+                    // <figure>
+                    //     <div class="seal ${showDigitalSeal(val.digital)}"></div>
+                    //         <img alt="${val.name}" src="${fixImageUrl(val)}">
+                    //     <figcaption>
+                    //         <div class="content__product">
+                    //             <div class="price-group">
+                    //                 <div class="preorder">${validPre(val.presale)}</div>
+                    //                 <div class="price">${validPrace(val.price_block.price)}</div>
+                    //                 <div class="special-price">R$ ${val.price_block.credit_card.value_with_discount}</div>
+                    //                 <div class="discount-cc">${validacaoParcelamento(val.price_block.credit_card, val.price_block.price)}</div>
+                    //             </div>
+                    //         </div>
+                    //     </figcaption>
+                    // </figure>`
+
+                    var changeInfoEstante = (element, infos) => {
+                        if (infos[0].fil_id != 16) {
+                            $(element).find('figure img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${infos[0].sku}&qld=72&l=300&a=-1&MktpIn=true&Lojista=${infos[0].fil_id}`)
+                        } else {
+                            $(element).find('figure img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${infos[0].sku}&qld=72&l=300&a=-1`)
+                        }
+                        //console.log(info[0].credit_card)
+                        $(element).find('.discount-cc').text(validacaoParcelamento(infos[0].credit_card, infos[0].price))
+                        $(element).find('.special-price').text(validPrace(infos[0].price))
+
+                    }
+
+                    $('.product__estante').each((index, element) => {
+                        $(element).data('sku') != "" ? changeInfoEstante(element, info[index]) : ""
+                    })
+                },
+                error: function (msg) {
+                    console.log(msg)
+                }
+            })
+
+
+
             // $.get(`//10.234.140.75/buyBox/Loja/16/produto/${productsSkuListed}/lojistaeleito`, function (info, index) {
             //     info.forEach((element, index) => {
             //         element.length && element[0].hasOwnProperty('store_name') ? $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por ${element[0].store_name}`) : $(thisSlider).find(`[data-sku] .product__seller`).text(`Vendido por Saraiva`)
@@ -854,7 +918,6 @@ var slickLoadAjax = (thisSlider, id_vitrine) => {
         $(thisSlider).fadeOut('fast', function () {
             $(this).slick('unslick').children().remove().promise().done(function () {
                 if ($(thisSlider).hasClass('comum')) {
-                    console.log('oi')
                     callAjaxLento()
                 } else {
                     callAjax()
@@ -995,9 +1058,13 @@ $(document).ready(function () {
         e.preventDefault()
         var $this = $(this)
         var thisUrl = $(this).children().attr('href')
-        !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('id-vitrine')) : ''
+        !$this.hasClass('active') ? slickLoadAjax($this.closest('.row').find('[data-vitrine]'), $this.data('id-vitrine'),thisUrl) : ''
         $this.addClass('active').siblings().removeClass('active')
-        $this.closest('.row').find('[data-button-vitrine]').children('a').attr('href', thisUrl)
+        $this.closest('.row').find('[data-button-vitrine]').each(function(){
+            $(this).find('a').attr('href', thisUrl)
+        })
+        //console.log($(this).closest('.row').find('.product__estante--cta-ver-todos a'))
+        //console.log($this.closest('.row').find('.product__estante--cta-ver-todos'))
     })
 
 

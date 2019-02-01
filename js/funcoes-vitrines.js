@@ -122,7 +122,25 @@ var vitrineLoader = (lista, el, urlbutton) => {
         }
 
         function validateOnSale(onSale, data) {
-            return (onSale.length && onSale[0].category) ? `<div class="content__category"><img src="${onSale[0].category.url}" title="${onSale[0].category.text}"></div>` : `<div class="content__category"></div>`
+            Object.size = function(obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) size++;
+                }
+                return size;
+            };
+
+            var objectSize = Object.size(data.on_sale)
+            
+            //var keys = Object.keys(data.on_sale[0])
+            return objectSize ? data.on_sale[0].hasOwnProperty("category") ? `<img src="${data.on_sale[0].category.url}" title="${data.on_sale[0].category.url}">` : "" : "" 
+            //console.log(size && data.on_sale.hasOwnProperty(category) ? `<img src="${data.on_sale[0].category.url}" title="${data.on_sale[0].category.url}">` : `teste`)
+            //return data.on_sale.length ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.url}">` : `teste`
+            //console.log(typeof onSale != "undefined" && onSale.hasOwnProperty(0) ? typeof onSale[0].category != "undefined" ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.url}">`  : "no url"  : "no category")
+            //return typeof onSale != "undefined" && onSale.hasOwnProperty(0) ? typeof onSale[0].category != "undefined" ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.url}">`  : "no url"  : "no category"
+            //return onSale.length ? `oi` : `teste`
+            //return "selo"
+            //return onSale.length ? `<img src="${onSale[0].category.url}" title="${onSale[0].category.url}">` : ``
         }
 
         function limitTitleShowcase(title, size) {
@@ -236,7 +254,8 @@ var vitrineLoader = (lista, el, urlbutton) => {
                                         <a href="${val.url}"><img src="${fixImageUrl(val)}" alt="${val.name}"/></a>
                                         ${validateSale(val.price_block.price.discount_percent)}
                                 </figure>
-                                <div class="product__seal">${validateOnSale(val.on_sale)}</div>
+                                <div class="product__seal">
+                                <div class="content__category">${validateOnSale(val.onSale,val)}</div></div>
                             </div>
                             <div class="product__info">
                                 <div class="product__status">${validPre(val.presale)}</div>
@@ -426,7 +445,7 @@ var htmlModal = (product, id, sob, element, buybox) => {
                             </div>
                             <div class="image">
                                 <div class="content__image">
-                                    <img src="https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${id}&qld=90&l=430&a=-1${buybox[0][0].fil_id != 16 ? `&MktpIn=true&Lojista=${buybox[0][0].fil_id}` : ``}">
+                                    <img src="https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${id}&qld=90&l=430&a=-1${buybox.length > 0 ? buybox[0][0].fil_id != 16 ? `&MktpIn=true&Lojista=${buybox[0][0].fil_id}` : `` : ""}">
                                 </div>
                             </div>
                             <div class="description">
@@ -631,7 +650,7 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
         $.when(
             $.get(`https://api.saraiva.com.br/collection/products/${id_vitrine}/0/0/1?l=${data.produtos_quantidade}`, function (resposta) {
                 vitrineLoader(resposta, thisSlider, urlbutton)
-
+                //$(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active').find(`[data-sku]`).removeClass('loading')
             })
         ).then(function (data) {
             data.products.forEach((produto, index, array) => {
@@ -797,19 +816,19 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
                 }
             });
 
-            function mountSlickAfterLoadInfo(index,dataLength) {
+            function mountSlickAfterLoadInfo(index, dataLength) {
                 index == dataLength - 1 ? $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active').find(`[data-sku]`).removeClass('loading') : ""
             }
             if ($(thisSlider).is('.comum')) {
-                var productsComum = [];
 
+                var productsComum = [];
                 $(thisSlider).find('.product__comum').each((index, element) => {
                     productsComum.push($(element).data('sku'))
                 })
-                $.get({
-                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsComum.join(',')}`,
+                $.ajax({
+                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsComum.join(',')}?${new Date().getTime()}`,
+                    dataType: "json",
                     success: function (info) {
-
                         const estruturaPrice = (index) => {
                             return `
                                     <div class="product__price">
@@ -824,7 +843,7 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
                                     `
                         }
                         const changeInfo = (element, index, dataLength) => {
-                            $(element).find('.product__pic img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${info[index][0].sku}&qld=90&l=300&a=-1${info[index][0].fil_id != 16 ? `&MktpIn=true&Lojista=${info[index][0].fil_id}` : ``}`)
+                            $(element).find('.product__pic figure img').attr('src', `https://images.livrariasaraiva.com.br/imagemnet/imagem.aspx/?pro_id=${info[index][0].sku}&qld=90&l=300&a=-1${info[index][0].fil_id != 16 ? `&MktpIn=true&Lojista=${info[index][0].fil_id}` : ``}`)
                             $(element).find('.product__seller').text(`Vendido por ${info[index][0].store_name}`)
                             $(element).find('.product__price').replaceWith(estruturaPrice(index))
                             mountSlickAfterLoadInfo(index,dataLength)
@@ -845,8 +864,9 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
                 $(thisSlider).find('.product__estante').each((index, element) => {
                     productsEstante.push($(element).data('sku'))
                 })
-                $.get({
-                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsEstante.join(',')}`,
+                $.ajax({
+                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsEstante.join(',')}?${new Date().getTime()}`,
+                    dataType: "json",
                     success: function (info) {
 
                         var changeInfoEstante = (element, index, dataLength) => {
@@ -873,8 +893,9 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
                 $(thisSlider).find('.product__aspirational').each((index, element) => {
                     productsAspirational.push($(element).data('sku'))
                 })
-                $.get({
-                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsAspirational.join(',')}`,
+                $.ajax({
+                    url: `https://preco.saraiva.com.br/v3/buyBox/produto/${productsAspirational.join(',')}?${new Date().getTime()}`,
+                    dataType: "json",
                     success: function (info) {
                         var changeInfoAspirational = (element, index, dataLength) => {
                             var infos = info[index]
@@ -891,7 +912,7 @@ var slickLoadAjax = (thisSlider, id_vitrine, urlbutton) => {
 
                     }
                 })
-            } else{
+            } else {
                 $(thisSlider).fadeIn('fast').slick(slickOptions).addClass('active').find(`[data-sku]`).removeClass('loading')
             }
 
